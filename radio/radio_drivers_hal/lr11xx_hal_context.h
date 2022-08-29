@@ -36,7 +36,6 @@ typedef struct
 {
     const struct  spi_dt_spec spi;
 
-    struct gpio_dt_spec nss;
     struct gpio_dt_spec busy;
     struct gpio_dt_spec reset;
 
