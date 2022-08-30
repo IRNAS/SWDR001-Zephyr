@@ -1,5 +1,7 @@
 menu "zephyr lr11xx driver"
 
-rsource "radio/Kconfig"
+rsource "drivers/Kconfig"
+
+source "$ZEPHYR_BASE/Kconfig.zephyr"
 
 endmenu

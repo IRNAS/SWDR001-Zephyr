@@ -1,1 +1,0 @@
-zephyr_library_sources_ifdef(lr11xx_hal.c)

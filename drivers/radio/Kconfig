@@ -8,5 +8,12 @@ menuconfig LR11XX_LIB
 
 if LR11XX_LIB
 
+config LR11XX_LIB_SHELL
+  bool "Enable shell command for lr1110 lib"
+  depends on SHELL
+
+module = LR11XX
+module-str = lr11xx
+source "subsys/logging/Kconfig.template.log_config"
 
 endif # LR11XX_LIB

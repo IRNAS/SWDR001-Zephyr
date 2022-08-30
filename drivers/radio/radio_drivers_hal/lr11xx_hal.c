@@ -40,7 +40,7 @@ static volatile radio_mode_t radio_mode = RADIO_AWAKE;
 /**
  * @brief Wait until radio busy pin returns to 0
  */
-lr11xx_hal_status_t lr11xx_hal_wait_on_busy( struct gpio_dt_spec *busy_pin );
+lr11xx_hal_status_t lr11xx_hal_wait_on_busy( const struct gpio_dt_spec *busy_pin );
 
 /**
  * @brief Check if device is ready to receive spi transaction.
@@ -70,11 +70,11 @@ lr11xx_hal_status_t lr11xx_hal_write( const void* context, const uint8_t* comman
     lr11xx_hal_check_device_ready( lr11xx_context );
     const struct spi_buf tx_buf[] = {
         {
-			.buf = command,
+			.buf = (uint8_t *)command,
 			.len = command_length,
 		},
 		{
-			.buf = data,
+			.buf = (uint8_t *)data,
 			.len = data_length
 		},
 #if defined( USE_LR11XX_CRC_OVER_SPI )
@@ -106,7 +106,7 @@ lr11xx_hal_status_t lr11xx_hal_write( const void* context, const uint8_t* comman
         return LR11XX_HAL_STATUS_OK;
     }
 
-    return lr11xx_hal_wait_on_busy(lr11xx_context->busy);
+    return lr11xx_hal_wait_on_busy(&lr11xx_context->busy);
 }
 
 lr11xx_hal_status_t lr11xx_hal_direct_read( const void* context, uint8_t* data, const uint16_t data_length )
@@ -114,6 +114,8 @@ lr11xx_hal_status_t lr11xx_hal_direct_read( const void* context, uint8_t* data, 
     const lr11xx_hal_context_t* lr11xx_context = ( const lr11xx_hal_context_t* ) context;
 
     lr11xx_hal_check_device_ready( lr11xx_context );
+
+    int ret;
     
 #if defined( USE_LR11XX_CRC_OVER_SPI )
     uint8_t rx_crc;
@@ -172,7 +174,7 @@ lr11xx_hal_status_t lr11xx_hal_read( const void* context, const uint8_t* command
 
     const struct spi_buf tx_buf[] = {
         {
-			.buf = command,
+			.buf = (uint8_t *)command,
 			.len = command_length,
 		},
 #if defined( USE_LR11XX_CRC_OVER_SPI )
@@ -249,9 +251,9 @@ lr11xx_hal_status_t lr11xx_hal_reset( const void* context )
 {
     const lr11xx_hal_context_t* lr11xx_context = ( const lr11xx_hal_context_t* ) context;
 
-    gpio_pin_set_dt(lr11xx_context->reset, 0);
+    gpio_pin_set_dt(&lr11xx_context->reset, 0);
     k_sleep(K_MSEC(5));
-    gpio_pin_set_dt(lr11xx_context->reset, 1);
+    gpio_pin_set_dt(&lr11xx_context->reset, 1);
     k_sleep(K_MSEC(5));
 
     // Wait 200ms until internal lr11xx fw is ready
@@ -281,9 +283,9 @@ static void lr11xx_hal_wait_on_busy_timer_handler(struct k_timer *dummy)
     lr11xx_hal_busy_timeout = true;
 }
 
-K_TIMER_DEFINE(lr11xx_hal_wait_on_busy_timer, lr11xx_hal_wait_on_busy_timer_handler, )
+K_TIMER_DEFINE(lr11xx_hal_wait_on_busy_timer, lr11xx_hal_wait_on_busy_timer_handler, NULL);
 
-lr11xx_hal_status_t lr11xx_hal_wait_on_busy( struct gpio_dt_spec *busy_pin )
+lr11xx_hal_status_t lr11xx_hal_wait_on_busy( const struct gpio_dt_spec *busy_pin )
 {
     lr11xx_hal_busy_timeout = false;
     k_timer_start(&lr11xx_hal_wait_on_busy_timer, K_SECONDS(LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC), K_NO_WAIT);
@@ -307,7 +309,7 @@ void lr11xx_hal_check_device_ready( const lr11xx_hal_context_t* lr11xx_context )
 {
     if( radio_mode != RADIO_SLEEP )
     {
-        lr11xx_hal_wait_on_busy( lr11xx_context->busy );
+        lr11xx_hal_wait_on_busy( &lr11xx_context->busy );
     }
     else
     {
@@ -315,9 +317,9 @@ void lr11xx_hal_check_device_ready( const lr11xx_hal_context_t* lr11xx_context )
         const struct spi_cs_control *ctrl = lr11xx_context->spi.config.cs;
 
 
-        gpio_pin_set_dt(ctrl->gpio, 0);
-        gpio_pin_set_dt(ctrl->gpio, 1);
-        lr11xx_hal_wait_on_busy( lr11xx_context->busy );
+        gpio_pin_set_dt(&ctrl->gpio, 0);
+        gpio_pin_set_dt(&ctrl->gpio, 1);
+        lr11xx_hal_wait_on_busy( &lr11xx_context->busy );
         radio_mode = RADIO_AWAKE;
     }
 }
