@@ -185,6 +185,8 @@ lr11xx_hal_status_t lr11xx_hal_read( const void* context, const uint8_t* command
 #endif //defined( USE_LR11XX_CRC_OVER_SPI )
     };
 
+    
+
     const struct spi_buf_set tx = {
 		.buffers = tx_buf,
 		.count = ARRAY_SIZE(tx_buf),
@@ -195,6 +197,13 @@ lr11xx_hal_status_t lr11xx_hal_read( const void* context, const uint8_t* command
     {
         return LR11XX_HAL_STATUS_ERROR;
     }
+
+    printk("CMD: ");
+    for(int i=0; i<command_length; i++)
+    {
+        printk("%x ", command[i]);
+    }
+    printk("\n");
 
     if(data_length > 0)
     {
@@ -232,6 +241,13 @@ lr11xx_hal_status_t lr11xx_hal_read( const void* context, const uint8_t* command
             return LR11XX_HAL_STATUS_ERROR;
         }
 
+        printk("REC: ");
+        for(int i=0; i<data_length; i++)
+        {
+            printk("%x ", data[i]);
+        }
+        printk("\n");
+
 #if defined( USE_LR11XX_CRC_OVER_SPI )
         // Check CRC value
         uint8_t computed_crc = lr11xx_hal_compute_crc( 0xFF, &dummy_byte, 1 );
@@ -250,10 +266,9 @@ lr11xx_hal_status_t lr11xx_hal_read( const void* context, const uint8_t* command
 lr11xx_hal_status_t lr11xx_hal_reset( const void* context )
 {
     const lr11xx_hal_context_t* lr11xx_context = ( const lr11xx_hal_context_t* ) context;
-
-    gpio_pin_set_dt(&lr11xx_context->reset, 0);
-    k_sleep(K_MSEC(5));
     gpio_pin_set_dt(&lr11xx_context->reset, 1);
+    k_sleep(K_MSEC(5));
+    gpio_pin_set_dt(&lr11xx_context->reset, 0);
     k_sleep(K_MSEC(5));
 
     // Wait 200ms until internal lr11xx fw is ready
@@ -299,6 +314,7 @@ lr11xx_hal_status_t lr11xx_hal_wait_on_busy( const struct gpio_dt_spec *busy_pin
 
     if(lr11xx_hal_busy_timeout)
     {
+        printk("Busy pin timeout\n");
         return LR11XX_HAL_STATUS_ERROR;
     }
     
@@ -315,10 +331,11 @@ void lr11xx_hal_check_device_ready( const lr11xx_hal_context_t* lr11xx_context )
     {
         // Busy is HIGH in sleep mode, wake-up the device with a small glitch on NSS
         const struct spi_cs_control *ctrl = lr11xx_context->spi.config.cs;
+        printk("CS: %d bus: %s\n",ctrl->gpio.pin, ctrl->gpio.port->name);
 
 
-        gpio_pin_set_dt(&ctrl->gpio, 0);
         gpio_pin_set_dt(&ctrl->gpio, 1);
+        gpio_pin_set_dt(&ctrl->gpio, 0);
         lr11xx_hal_wait_on_busy( &lr11xx_context->busy );
         radio_mode = RADIO_AWAKE;
     }

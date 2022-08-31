@@ -21,8 +21,15 @@ void main( void )
 
     context = apps_common_lr11xx_get_context( );
 
-    apps_common_lr11xx_system_init( ( void* ) context );
-    apps_common_lr11xx_fetch_and_print_version( ( void* ) context );
+    apps_common_lr11xx_system_init( context );
+    apps_common_lr11xx_fetch_and_print_version( context );
 
-    apps_common_lr11xx_radio_init( ( void* ) context );
+    apps_common_lr11xx_radio_init( context );
+
+    lr11xx_radio_set_tx_cw( context );
+
+    while( 1 )
+    {
+        k_sleep(K_MSEC(1));
+    }
 }

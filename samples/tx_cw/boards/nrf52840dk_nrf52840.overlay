@@ -5,17 +5,21 @@
 &spi2 {
     compatible = "nordic,nrf-spi";
     status = "okay";
+    pinctrl-0 = <&spi2_default>;
+    pinctrl-1 = <&spi2_sleep>;
+    pinctrl-names = "default", "sleep";
 
+    cs-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
     lr1110: lr1110@0 {
         compatible = "irnas,lr11xx";
         reg = <0>;
         spi-max-frequency = <4000000>;
         label = "LR1110";
 
-        reset-gpios = <&gpio0 3 0>;
+        reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
         gps-lna-en-gpios = <&gpio0 29 0>;
-        busy-gpios = <&gpio1 4 0>;
-        event-gpios = <&gpio1 6 0>;
+        busy-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
+        event-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
 
         rf-sw-enable = "DIO5", "DIO6", "DIO7";
         rf-sw-standby-mode = "NONE";
@@ -26,5 +30,24 @@
         rf-sw-wifi-mode = "NONE";
         rf-sw-gnss-mode = "DIO7";
     };
+};
+
+&pinctrl {
+	spi2_default: spi2_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
+			        <NRF_PSEL(SPIM_MOSI, 1, 13)>,
+			        <NRF_PSEL(SPIM_MISO, 1, 14)>;
+		};
+	};
+
+	spi2_sleep: spi2_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
+			        <NRF_PSEL(SPIM_MOSI, 1, 13)>,
+			        <NRF_PSEL(SPIM_MISO, 1, 14)>;
+			low-power-enable;
+		};
+	};
 };
 

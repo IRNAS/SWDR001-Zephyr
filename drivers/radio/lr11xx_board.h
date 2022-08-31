@@ -41,9 +41,9 @@ typedef struct lr11xx_board_pa_pwr_cfg_t
 /**
  * @brief Create lr11xx_hal_context_t from Device Tree binding.
  * 
- * @param context 
+ * @return lr11xx_hal_context_t* 
  */
-void lr11xx_board_context_create(lr11xx_hal_context_t * context);
+lr11xx_hal_context_t *lr11xx_board_context_get(void);
 
 /**
  * @brief Init GPIO pins in lr11xx_hal_context_t context.

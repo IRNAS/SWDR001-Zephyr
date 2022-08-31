@@ -26,8 +26,7 @@
 
 #define LR11XX_SPI_OPERATION (SPI_WORD_SET(8) |			\
 				SPI_OP_MODE_MASTER |			\
-				SPI_MODE_CPOL |				\
-				SPI_MODE_CPHA)
+				SPI_TRANSFER_MSB)
 
 #define BOARD_TCXO_WAKEUP_TIME     (5)
 
@@ -35,9 +34,9 @@
  * -----------------------------------------------------------------------------
  * --- PRIVATE CONSTANTS -------------------------------------------------------
  */
-/*
+
 #if DT_ANY_INST_ON_BUS_STATUS_OKAY(spi)
-static const lr11xx_hal_context_t lr11xx_context = {
+static lr11xx_hal_context_t lr11xx_context = {
     .spi = SPI_DT_SPEC_INST_GET(0, LR11XX_SPI_OPERATION, 0),
     .busy = GPIO_DT_SPEC_INST_GET(0, busy_gpios),
     .reset = GPIO_DT_SPEC_INST_GET(0, reset_gpios),   
@@ -49,11 +48,34 @@ static const lr11xx_hal_context_t lr11xx_context = {
 #if DT_INST_NODE_HAS_PROP(0, gps_lna_en_gpios)
     .lna_en = GPIO_DT_SPEC_INST_GET(0, gps_lna_en_gpios),
 #endif //DT_INST_NODE_HAS_PROP(inst, gps_lna_en_gpios)
-}
-#else
-    static const lr11xx_hal_context_t lr11xx_context;
-#endif
-*/
+};
+
+static char *rf_sw_enable[] = DT_INST_PROP(0, rf_sw_enable);
+static size_t rf_sw_enable_len = DT_INST_PROP_LEN(0, rf_sw_enable);
+
+static char *rf_sw_standby_mode[] = DT_INST_PROP(0, rf_sw_standby_mode);
+static size_t rf_sw_standby_mode_len = DT_INST_PROP_LEN(0, rf_sw_standby_mode);
+
+static char *rf_sw_rx_mode[] = DT_INST_PROP(0, rf_sw_rx_mode);
+static size_t rf_sw_rx_mode_len = DT_INST_PROP_LEN(0, rf_sw_rx_mode);
+
+static char *rf_sw_tx_mode[] = DT_INST_PROP(0, rf_sw_tx_mode);
+static size_t rf_sw_tx_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_mode);
+
+static char *rf_sw_tx_hp_mode[] = DT_INST_PROP(0, rf_sw_tx_hp_mode);
+static size_t rf_sw_tx_hp_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_hp_mode);
+
+static char *rf_sw_tx_hf_mode[] = DT_INST_PROP(0, rf_sw_tx_hf_mode);
+static size_t rf_sw_tx_hf_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_hf_mode);
+
+static char *rf_sw_wifi_mode[] = DT_INST_PROP(0, rf_sw_wifi_mode);
+static size_t rf_sw_wifi_mode_len = DT_INST_PROP_LEN(0, rf_sw_wifi_mode);
+
+static char *rf_sw_gnss_mode[] = DT_INST_PROP(0, rf_sw_gnss_mode);
+static size_t rf_sw_gnss_mode_len = DT_INST_PROP_LEN(0, rf_sw_gnss_mode);
+#else 
+static lr11xx_hal_context_t lr11xx_context;
+#endif //DT_ANY_INST_ON_BUS_STATUS_OKAY(spi)
 
 static const lr11xx_radio_rssi_calibration_table_t rssi_calibration_table_below_600mhz = {
     .gain_offset = 0,
@@ -154,55 +176,15 @@ static uint8_t create_rf_sw_setting(char *list[], size_t len)
     return rf_sw;
 }
 
-
-void lr11xx_board_context_create(lr11xx_hal_context_t * context)
+lr11xx_hal_context_t *lr11xx_board_context_get(void)
 {
-    memset(context, 0, sizeof(lr11xx_hal_context_t));
-/*
+    return &lr11xx_context;
+}
+
+void lr11xx_board_context_init(lr11xx_hal_context_t * context)
+{
+
 #if DT_ANY_INST_ON_BUS_STATUS_OKAY(spi)
-    context->spi = SPI_DT_SPEC_INST_GET(inst, LR11XX_SPI_OPERATION, 0);
-#else
-    return;
-#endif //DT_ANY_INST_ON_BUS_STATUS_OKAY(spi)
-
-    context->busy = GPIO_DT_SPEC_INST_GET(inst, busy_gpios);
-    context->reset = GPIO_DT_SPEC_INST_GET(inst, reset_gpios);   
-    context->event = GPIO_DT_SPEC_INST_GET(inst, event_gpios);
-#if DT_INST_NODE_HAS_PROP(inst, pwr_en_gpios)
-    context->pwr_en = GPIO_DT_SPEC_INST_GET(inst, pwr_en_gpios);
-#endif //DT_INST_NODE_HAS_PROP(inst, pwr_en_gpios)
-
-#if DT_INST_NODE_HAS_PROP(inst, gps_lna_en_gpios)
-    context->lna_en = GPIO_DT_SPEC_INST_GET(inst, gps_lna_en_gpios);
-#endif //DT_INST_NODE_HAS_PROP(inst, gps_lna_en_gpios)
-*/
-/*
-#if DT_ANY_INST_ON_BUS_STATUS_OKAY(spi)
-    char *rf_sw_enable[] = DT_INST_PROP(0, rf_sw_enable);
-    size_t rf_sw_enable_len = DT_INST_PROP_LEN(0, rf_sw_enable);
-
-    char *rf_sw_standby_mode[] = DT_INST_PROP(0, rf_sw_standby_mode);
-    size_t rf_sw_standby_mode_len = DT_INST_PROP_LEN(0, rf_sw_standby_mode);
-
-    char *rf_sw_rx_mode[] = DT_INST_PROP(0, rf_sw_rx_mode);
-    size_t rf_sw_rx_mode_len = DT_INST_PROP_LEN(0, rf_sw_rx_mode);
-
-    char *rf_sw_tx_mode[] = DT_INST_PROP(0, rf_sw_tx_mode);
-    size_t rf_sw_tx_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_mode);
-
-    char *rf_sw_tx_hp_mode[] = DT_INST_PROP(0, rf_sw_tx_hp_mode);
-    size_t rf_sw_tx_hp_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_hp_mode);
-
-    char *rf_sw_tx_hf_mode[] = DT_INST_PROP(0, rf_sw_tx_hf_mode);
-    size_t rf_sw_tx_hf_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_hf_mode);
-
-    char *rf_sw_wifi_mode[] = DT_INST_PROP(0, rf_sw_wifi_mode);
-    size_t rf_sw_wifi_mode_len = DT_INST_PROP_LEN(0, rf_sw_wifi_mode);
-
-    char *rf_sw_gnss_mode[] = DT_INST_PROP(0, rf_sw_gnss_mode);
-    size_t rf_sw_gnss_mode_len = DT_INST_PROP_LEN(0, rf_sw_gnss_mode);
-
-
 	context->rf_switch_cfg.enable  = create_rf_sw_setting(rf_sw_enable, rf_sw_enable_len);
 	context->rf_switch_cfg.standby = create_rf_sw_setting(rf_sw_standby_mode, rf_sw_standby_mode_len);
 	context->rf_switch_cfg.rx      = create_rf_sw_setting(rf_sw_rx_mode, rf_sw_rx_mode_len);
@@ -212,11 +194,7 @@ void lr11xx_board_context_create(lr11xx_hal_context_t * context)
 	context->rf_switch_cfg.wifi    = create_rf_sw_setting(rf_sw_wifi_mode, rf_sw_wifi_mode_len);
 	context->rf_switch_cfg.gnss    = create_rf_sw_setting(rf_sw_gnss_mode, rf_sw_gnss_mode_len);
 #endif
-*/
-}
 
-void lr11xx_board_context_init(lr11xx_hal_context_t * context)
-{
     // Busy pin
     gpio_pin_configure_dt(&context->busy, GPIO_INPUT);
     // Reset pin

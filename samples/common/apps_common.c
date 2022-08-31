@@ -41,7 +41,7 @@ LOG_MODULE_REGISTER(lr11xx_common, CONFIG_LR11XX_LOG_LEVEL);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-static lr11xx_hal_context_t context;
+static lr11xx_hal_context_t *context;
 
 /*
  * -----------------------------------------------------------------------------
@@ -55,40 +55,39 @@ static lr11xx_hal_context_t context;
 
 lr11xx_hal_context_t* apps_common_lr11xx_get_context( )
 {
-    lr11xx_board_context_create(&context);
-    lr11xx_board_context_init(&context);
-    return &context;
+    context = lr11xx_board_context_get();
+    lr11xx_board_context_init(context);
+    return context;
 }
 
 void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context )
 {
     int ret = 0;
 
-    
-    //ret = lr11xx_system_reset( ( void* ) context );
+    printk("Reset system\n");
+    ret = lr11xx_system_reset( ( void* ) context );
     if(ret)
     {
         LOG_ERR("System reset failed.");
     }
 
     // Configure the regulator
-    //const lr11xx_system_reg_mode_t regulator = lr11xx_board_get_reg_mode();
-    //ret = lr11xx_system_set_reg_mode( ( void* ) context, regulator );
+    const lr11xx_system_reg_mode_t regulator = lr11xx_board_get_reg_mode();
+    ret = lr11xx_system_set_reg_mode( ( void* ) context, regulator );
     if(ret)
     {
         LOG_ERR("Failed to config regulator.");
     }
 
     // Configure RF switch
-    //const lr11xx_system_rfswitch_cfg_t rf_switch_setup = context->rf_switch_cfg;
-    //ret = lr11xx_system_set_dio_as_rf_switch( context, &rf_switch_setup );
+    const lr11xx_system_rfswitch_cfg_t rf_switch_setup = context->rf_switch_cfg;
+    ret = lr11xx_system_set_dio_as_rf_switch( context, &rf_switch_setup );
     if(ret)
     {
         LOG_ERR("Failed to config rf switch.");
     }
 
     // Configure the 32MHz TCXO if it is available on the board
-    /*
     const lr11xx_board_tcxo_cfg_t tcxo_cfg = lr11xx_board_get_tcxo_cfg( );
     if( tcxo_cfg.has_tcxo == true )
     {
@@ -99,43 +98,42 @@ void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context )
             LOG_ERR("Failed to configure TCXO.");
         }
     }
-    */
 
     // Configure the Low Frequency Clock
-    //const lr11xx_board_lf_clck_cfg_t lf_clk_cfg = lr11xx_board_get_lf_clk_cfg( );
-    //ret = lr11xx_system_cfg_lfclk( context, lf_clk_cfg.lf_clk_cfg, lf_clk_cfg.wait_32k_ready );
+    const lr11xx_board_lf_clck_cfg_t lf_clk_cfg = lr11xx_board_get_lf_clk_cfg( );
+    ret = lr11xx_system_cfg_lfclk( context, lf_clk_cfg.lf_clk_cfg, lf_clk_cfg.wait_32k_ready );
     if(ret)
     {
         LOG_ERR("Failed to configure Configure the Low Frequency Clock.");
     }
 
-    //ret = lr11xx_system_clear_errors( context );
+    ret = lr11xx_system_clear_errors( context );
     if(ret)
     {
         LOG_ERR("Failed to clear errors.");
     }
 
-    //ret = lr11xx_system_calibrate( context, 0x3F );
+    ret = lr11xx_system_calibrate( context, 0x3F );
     if(ret)
     {
         LOG_ERR("Failed to calibrate.");
     }
 
     uint16_t errors;
-    //ret = lr11xx_system_get_errors( context, &errors );
+    ret = lr11xx_system_get_errors( context, &errors );
     if(ret)
     {
         LOG_ERR("Failed to get errors.");
     }
     LOG_INF("LR init errors: %d", errors);
 
-    //ret = lr11xx_system_clear_errors( context );
+    ret = lr11xx_system_clear_errors( context );
     if(ret)
     {
         LOG_ERR("Failed to clear errors.");
     }
 
-    //ret = lr11xx_system_clear_irq_status( context, LR11XX_SYSTEM_IRQ_ALL_MASK );
+    ret = lr11xx_system_clear_irq_status( context, LR11XX_SYSTEM_IRQ_ALL_MASK );
     if(ret)
     {
         LOG_ERR("Failed to clear irq status.");
@@ -146,7 +144,7 @@ void apps_common_lr11xx_fetch_and_print_version( const lr11xx_hal_context_t* con
 {
     lr11xx_system_version_t version;
 
-    //lr11xx_system_get_version( ( void* ) context, &version );
+    lr11xx_system_get_version( ( void* ) context, &version );
 
     LOG_INF( "LR11xx information:" );
     LOG_INF( "  - Firmware = 0x%04X", version.fw );
@@ -158,19 +156,19 @@ void apps_common_lr11xx_radio_init( const void* context )
 {
     int ret;
 
-    //ret = lr11xx_radio_set_pkt_type( context, PACKET_TYPE );
+    ret = lr11xx_radio_set_pkt_type( context, PACKET_TYPE );
     if(ret)
     {
         LOG_ERR("Failed pkt pkt type.");
     }
 
-    //ret = lr11xx_radio_set_rf_freq( context, RF_FREQ_IN_HZ );
+    ret = lr11xx_radio_set_rf_freq( context, RF_FREQ_IN_HZ );
     if(ret)
     {
         LOG_ERR("Failed set RF freq.");
     }
 
-    //ret = lr11xx_radio_set_rssi_calibration( context, lr11xx_board_get_rssi_calibration_table( RF_FREQ_IN_HZ ) );
+    ret = lr11xx_radio_set_rssi_calibration( context, lr11xx_board_get_rssi_calibration_table( RF_FREQ_IN_HZ ) );
     if(ret)
     {
         LOG_ERR("Failed set RSSI calibration.");
@@ -197,7 +195,7 @@ void apps_common_lr11xx_radio_init( const void* context )
         LOG_ERR("Failed set RSSI calibration.");
     }
 */
-/*
+
     ret = lr11xx_radio_set_rx_tx_fallback_mode( context, FALLBACK_MODE );
     if(ret)
     {
@@ -273,6 +271,4 @@ void apps_common_lr11xx_radio_init( const void* context )
             ret = lr11xx_radio_set_pkt_address( context, FSK_NODE_ADDRESS, FSK_BROADCAST_ADDRESS );
         }
     }
-
-    */
 }
