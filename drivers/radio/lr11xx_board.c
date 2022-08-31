@@ -157,8 +157,7 @@ static uint8_t create_rf_sw_setting(char *list[], size_t len)
 
 void lr11xx_board_context_create(lr11xx_hal_context_t * context)
 {
-    memset(context, 0, sizeof(lr11xx_hal_context_t)); 
-
+    memset(context, 0, sizeof(lr11xx_hal_context_t));
 /*
 #if DT_ANY_INST_ON_BUS_STATUS_OKAY(spi)
     context->spi = SPI_DT_SPEC_INST_GET(inst, LR11XX_SPI_OPERATION, 0);

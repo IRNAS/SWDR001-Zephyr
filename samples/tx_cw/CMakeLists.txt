@@ -11,8 +11,9 @@ project(tx_cw)
 zephyr_compile_options(-fdiagnostics-color=always)
 
 zephyr_include_directories(.)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../common src/common)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../drivers/radio src/radio)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../common src/common)
+
 
 FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE ${app_sources})
