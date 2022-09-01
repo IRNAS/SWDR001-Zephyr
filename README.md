@@ -1,7 +1,14 @@
 # SWDR001-Zephyr
 IRNAS port of the Semtech SWDR001 LR11XX driver to Zephyr. Original package proposes an implementation in C of the driver for **LR11XX** radio component.
 
-## Components
+## Folder structure
+Driver is located in the `drivers/radio` foleder where `lr11xx_driver` contains Semtech SWDR001 LR11XX driver files and Zephy compatible hal implementation is contained in the `radio_drivers_hal` folder. Board specific interface functions and defined in the `lr11xx_board.h` and `lr11xx_board.c` files. 
+
+Compatible Device Tree bing is containd in the `dts` folder. 
+
+`samples` folder contains functionality samples. Only `tx_cw` if functional at the moment. 
+
+## SWDR001 LR11XX driver Components
 
 The driver is split in several components:
 
