@@ -1,0 +1,5 @@
+zephyr_include_directories(.)
+add_subdirectory_ifdef(CONFIG_GNSS_SCAN_AUTONOMOUS gnss_autonomous)
+add_subdirectory_ifdef(CONFIG_GNSS_SCAN_ASSISTED gnss_assisted)
+
+target_sources(app PRIVATE main_gnss.c)
