@@ -1,0 +1,19 @@
+menuconfig LR11XX_LIB
+    bool "LR11XX library"
+    depends on SPI && GPIO
+    help
+        This library can handle one instance of lr1110/lr1120 chip present on the
+        board.
+        It implements basic modem lr10xx driver.
+
+if LR11XX_LIB
+
+config LR11XX_LIB_SHELL
+  bool "Enable shell command for lr1110 lib"
+  depends on SHELL
+
+module = LR11XX
+module-str = lr11xx
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # LR11XX_LIB
