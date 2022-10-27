@@ -1,0 +1,175 @@
+# Copyright (c) 2021, IRNAS d.o.o.
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  Semtech LR11XX LoRa Basic Modem-e lib/driver
+
+compatible: "irnas,lr11xx"
+
+include: spi-device.yaml
+
+properties:
+    pwr-en-gpios:
+      type: phandle-array
+      required: false
+      description: |
+        GPIO responsible for power of lr1110.
+
+    reset-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO connected to the NRESET signal on lr1110.
+
+        This signal is active-low as interpreted by lr1110.
+
+    gps-lna-en-gpios:
+      type: phandle-array
+      required: false
+      description: |
+        GPIO responsible for power of GPS LNA used by lr1110.
+
+    busy-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO connected to the BUSY/DIO0 signal on lr1110.
+
+        The BUSY line is high when the device is in sleep mode, 
+        and ready to accept a command. 
+        The BUSY line is low when the device is processing sent command.
+
+        This signal is active-low as interpreted by lr1110.
+
+    event-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO connected to the LR_EVENT/DIO9 signal on lr1110.
+        High EVENT line indicates an event must be read from lr1110.
+        The EVENT line stays high until all events are cleared.
+
+        This signal is active-high as interpreted by lr1110.
+
+    # RF configuration (DIO pins 5 through 8)
+
+    rf-sw-enable:
+      type: string-array
+      required: false
+      description: |
+        Configuration for enabling rf switches RFSW0 through RFSW3 (DIO5 - DIO8).
+
+        Select RFSW/DIO pins that will be used in any of the lr1110 modes.
+        If a RFSW/DIO pin is not selected it can not be used in any of the lr1110
+        modes and will be left in High-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be enabled then set value
+        to "NONE".
+
+    rf-sw-standby-mode:
+      type: string-array
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        for lr1110 standby mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be selected then set value
+        to "NONE".
+
+    rf-sw-rx-mode:
+      type: string-array
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        for lr1110 rx mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be selected then set value
+        to "NONE".
+
+    rf-sw-tx-mode:
+      type: string-array
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        for lr1110 tx mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be selected then set value
+        to "NONE".
+
+    rf-sw-tx-hp-mode:
+      type: string-array
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        for lr1110 tx hp mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be selected then set value
+        to "NONE".
+
+    rf-sw-tx-hf-mode:
+      type: string-array
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        for lr1110 tx hf mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be selected then set value
+        to "NONE".
+
+    rf-sw-wifi-mode:
+      type: string-array
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        for lr1110 wifi mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be selected then set value
+        to "NONE".
+
+    rf-sw-gnss-mode:
+      type: string-array
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        for lr1110 gnss mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are "DIOX" where X is one of: 5,6,7,8.
+        If none of the RFSW/DIO pins do not need to be selected then set value
+        to "NONE".
+
+
