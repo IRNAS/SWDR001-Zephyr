@@ -21,14 +21,11 @@
         busy-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
         event-gpios = <&gpio1 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN) >;
 
-        rf-sw-enable = "DIO5", "DIO6", "DIO7";
-        rf-sw-standby-mode = "NONE";
-        rf-sw-rx-mode = "DIO5";
-        rf-sw-tx-mode = "DIO5", "DIO6";
-        rf-sw-tx-hp-mode = "DIO6";
-        rf-sw-tx-hf-mode = "NONE";
-        rf-sw-wifi-mode = "NONE";
-        rf-sw-gnss-mode = "DIO7";
+        rf-sw-enable = <5 6 7>;
+        rf-sw-rx-mode = <5>;
+        rf-sw-tx-mode = <5 6>;
+        rf-sw-tx-hp-mode = <6>;
+        rf-sw-gnss-mode = <7>;
     };
 };
 
