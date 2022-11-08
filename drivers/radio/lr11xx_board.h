@@ -14,42 +14,11 @@
 extern "C" {
 #endif
 
-/*
- * -----------------------------------------------------------------------------
- * --- DEPENDENCIES ------------------------------------------------------------
- */
-
 #include <zephyr.h>
+#include <device.h>
 #include "lr11xx_hal_context.h"
 #include "lr11xx_types.h"
 #include "lr11xx_radio_types.h"
-
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC MACROS -----------------------------------------------------------
- */
-
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC CONSTANTS --------------------------------------------------------
- */
-
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC TYPES ------------------------------------------------------------
- */
-typedef struct
-{
-    bool                                has_tcxo;
-    lr11xx_system_tcxo_supply_voltage_t supply;
-    uint32_t                            timeout_ms;
-} lr11xx_board_tcxo_cfg_t;
-
-typedef struct
-{
-    lr11xx_system_lfclk_cfg_t lf_clk_cfg;
-    bool                      wait_32k_ready;
-} lr11xx_board_lf_clck_cfg_t;
 
 typedef struct lr11xx_board_pa_pwr_cfg_t
 {
@@ -63,32 +32,18 @@ typedef struct lr11xx_board_pa_pwr_cfg_t
  */
 
 /**
- * @brief Create lr11xx_hal_context_t from Device Tree binding.
- *
- * @return lr11xx_hal_context_t*
- */
-lr11xx_hal_context_t *lr11xx_board_context_get(void);
-
-/**
- * @brief Init GPIO pins in lr11xx_hal_context_t context.
- *
- * @param context
- */
-void lr11xx_board_context_init(lr11xx_hal_context_t * context);
-
-/**
  * @brief Enable interrupt on event pin.
  *
  * @param context
  */
-void lr11xx_board_enable_interrupt(lr11xx_hal_context_t * context);
+void lr11xx_board_enable_interrupt(const struct device *dev);
 
 /**
  * @brief Disable interrupt on event pin.
  *
  * @param context
  */
-void lr11xx_board_disable_interrupt(lr11xx_hal_context_t * context);
+void lr11xx_board_disable_interrupt(const struct device *dev);
 
 /**
  * @brief Return HW specific reg mode.
@@ -96,20 +51,6 @@ void lr11xx_board_disable_interrupt(lr11xx_hal_context_t * context);
  * @return lr11xx_system_reg_mode_t
  */
 lr11xx_system_reg_mode_t lr11xx_board_get_reg_mode( void );
-
-/*!
- * @brief Get the TCXO configuration compatible with the board
- *
- * @return TCXO configuration compatible with the board
- */
-lr11xx_board_tcxo_cfg_t lr11xx_board_get_tcxo_cfg( void );
-
-/*!
- * @brief Get a LF clock configuration compatible with the board
- *
- * @return LF clock configuration compatible with the board
- */
-lr11xx_board_lf_clck_cfg_t lr11xx_board_get_lf_clk_cfg( void );
 
 /*!
  * @brief Return the RSSI calibration table corresponding to a given RF frequency

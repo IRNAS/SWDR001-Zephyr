@@ -40,6 +40,8 @@
 #include <string.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
+#include <device.h>
+#include <devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_radio.h"
@@ -51,6 +53,8 @@ LOG_MODULE_REGISTER(main);
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
+
+#define LR11XX_NODE           DT_NODELABEL(lr1110)
 
 /*
  * -----------------------------------------------------------------------------
@@ -67,7 +71,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-static lr11xx_hal_context_t* context;
+const struct device *context;
 
 /*
  * -----------------------------------------------------------------------------
@@ -88,7 +92,7 @@ void main( void )
     
     LOG_INF( "===== LR11xx TX CW example =====\n" );
 
-    context = apps_common_lr11xx_get_context( );
+    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
     apps_common_lr11xx_fetch_and_print_version( context );

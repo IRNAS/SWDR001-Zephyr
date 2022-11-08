@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <zephyr.h>
+#include <device.h>
 #include <zephyr/types.h>
 #include <drivers/gpio.h>
 #include <drivers/spi.h>
@@ -40,8 +41,6 @@ LOG_MODULE_REGISTER(lr11xx_common, CONFIG_LR11XX_LOG_LEVEL);
  * -----------------------------------------------------------------------------
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
-
-static lr11xx_hal_context_t *context;
 
 static volatile bool irq_fired = false;
 
@@ -89,20 +88,13 @@ void on_gnss_scan_done( void ) __attribute__( ( weak ) );
  * --- PUBLIC FUNCTIONS DEFINITION ---------------------------------------------
  */
 
-lr11xx_hal_context_t* apps_common_lr11xx_get_context( )
-{
-    /* Get DT context */
-    context = lr11xx_board_context_get();
-    /* Set interrupt callback */
-    context->event_interrupt_cb = radio_on_dio_irq;
-    /* Init context */
-    lr11xx_board_context_init(context);
-    return context;
-}
+/* Set interrupt callback - EvaTODO*/
+// context->event_interrupt_cb = radio_on_dio_irq;
 
-void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context )
+void apps_common_lr11xx_system_init( const struct device* context )
 {
     int ret = 0;
+    const struct lr11xx_hal_context_cfg_t *config = context->config;
 
     LOG_INF("Reset system");
     ret = lr11xx_system_reset( ( void* ) context );
@@ -120,7 +112,7 @@ void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context )
     }
 
     // Configure RF switch
-    const lr11xx_system_rfswitch_cfg_t rf_switch_setup = context->rf_switch_cfg;
+    const lr11xx_system_rfswitch_cfg_t rf_switch_setup = config->rf_switch_cfg;
     ret = lr11xx_system_set_dio_as_rf_switch( context, &rf_switch_setup );
     if(ret)
     {
@@ -128,7 +120,7 @@ void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context )
     }
 
     // Configure the 32MHz TCXO if it is available on the board
-    const lr11xx_board_tcxo_cfg_t tcxo_cfg = lr11xx_board_get_tcxo_cfg( );
+    const struct lr11xx_hal_context_tcxo_cfg_t tcxo_cfg; // EvaTODO - get from device structure = lr11xx_board_get_tcxo_cfg( );
     if( tcxo_cfg.has_tcxo == true )
     {
         const uint32_t timeout_rtc_step = lr11xx_radio_convert_time_in_ms_to_rtc_step( tcxo_cfg.timeout_ms );
@@ -140,7 +132,7 @@ void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context )
     }
 
     // Configure the Low Frequency Clock
-    const lr11xx_board_lf_clck_cfg_t lf_clk_cfg = lr11xx_board_get_lf_clk_cfg( );
+    const struct lr11xx_hal_context_lf_clck_cfg_t lf_clk_cfg; // EvaTODO - get from device structure = lr11xx_board_get_lf_clk_cfg( );
     ret = lr11xx_system_cfg_lfclk( context, lf_clk_cfg.lf_clk_cfg, lf_clk_cfg.wait_32k_ready );
     if(ret)
     {
@@ -180,7 +172,7 @@ void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context )
     }
 }
 
-void apps_common_lr11xx_fetch_and_print_version( const lr11xx_hal_context_t* context )
+void apps_common_lr11xx_fetch_and_print_version( const struct device* context )
 {
     lr11xx_system_version_t version;
 

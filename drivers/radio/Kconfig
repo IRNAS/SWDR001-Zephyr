@@ -20,6 +20,10 @@ config LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC
 
 config LR11XX_USE_CRC_OVER_SPI
   bool "Use CRC over SPI communication"
+
+config LR11XX_INIT_PRIORITY
+  int "Init priority"
+  default 72
   
 module = LR11XX
 module-str = lr11xx

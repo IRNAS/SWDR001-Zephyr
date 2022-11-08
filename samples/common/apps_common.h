@@ -40,21 +40,11 @@ extern "C" {
  */
 
 /*!
- * @brief Interface to initialise and return the lr11xx_hal_context_t object corresponding to the DT definition.
- *
- * @warning It is up to the caller to ensure the context pointer stays valid for the life duration of the
- * lr11xx_hal_context_t created by this call
- *
- * @returns Pointer to the lr11xx_hal_context_t object of the board
- */
-lr11xx_hal_context_t* apps_common_lr11xx_get_context( );
-
-/*!
  * @brief Initialize the system configuration of the transceiver
  *
  * @param [in] context  Pointer to the radio context
  */
-void apps_common_lr11xx_system_init( const lr11xx_hal_context_t* context );
+void apps_common_lr11xx_system_init( const struct device* context );
 
 /*!
  * @brief Initialize the radio configuration of the transceiver
@@ -68,7 +58,7 @@ void apps_common_lr11xx_radio_init( const void* context );
  *
  * @param [in] context  Pointer to the radio context
  */
-void apps_common_lr11xx_fetch_and_print_version( const lr11xx_hal_context_t* context );
+void apps_common_lr11xx_fetch_and_print_version( const struct device* context );
 
 /*!
  * @brief Interface to read bytes from rx buffer
