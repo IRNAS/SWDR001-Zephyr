@@ -54,121 +54,129 @@ properties:
     # RF configuration (DIO pins 5 through 8)
 
     rf-sw-enable:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for enabling rf switches RFSW0 through RFSW3 (DIO5 - DIO8).
+        Configuration for enabling rf switches RFSW0 through RFSW4 (DIO5 - DIO9).
 
         Select RFSW/DIO pins that will be used in any of the lr11xx modes.
         If a RFSW/DIO pin is not selected it can not be used in any of the lr11xx
         modes and will be left in High-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 
     rf-sw-standby-mode:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
         for lr1xx standby mode.
 
         If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
         If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
         If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 
     rf-sw-rx-mode:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
         for lr11xx rx mode.
 
         If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
         If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
         If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 
     rf-sw-tx-mode:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
         for lr11xx tx mode.
 
         If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
         If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
         If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 
     rf-sw-tx-hp-mode:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
         for lr11xx tx hp mode.
 
         If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
         If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
         If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 
     rf-sw-tx-hf-mode:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
         for lr11xx tx hf mode.
 
         If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
         If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
         If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 
     rf-sw-wifi-mode:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
         for lr11xx wifi mode.
 
         If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
         If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
         If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 
     rf-sw-gnss-mode:
-      type: array
+      type: int
       required: false
       description: |
-        Configuration for selecting RFSW0 through RFSW3 (DIO5 - DIO8) pin states 
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
         for lr11xx gnss mode.
 
         If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
         If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
         If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
 
-        Valid values are: 5,6,7,8, representing DIO5 - DIO8 pins.
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
 

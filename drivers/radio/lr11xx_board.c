@@ -94,122 +94,6 @@ static const lr11xx_radio_rssi_calibration_table_t rssi_calibration_table_above_
                      .g13hp7 = 9 },
 };
 
-/**
- * @brief DIO5 - DIO8 pins
- */
-enum lr11xx_dio_pin_e
-{
-    LR11XX_DIO5 = 5,
-    LR11XX_DIO6 = 6,
-    LR11XX_DIO7 = 7,
-    LR11XX_DIO8 = 8,
-};
-
-// EvaTODO
-/*
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_enable)
-static int rf_sw_enable[] = DT_INST_PROP(0, rf_sw_enable);
-static size_t rf_sw_enable_len = DT_INST_PROP_LEN(0, rf_sw_enable);
-#else
-static int rf_sw_enable[];
-static size_t rf_sw_enable_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_enable)
-
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_standby_mode)
-static int rf_sw_standby_mode[] = DT_INST_PROP(0, rf_sw_standby_mode);
-static size_t rf_sw_standby_mode_len = DT_INST_PROP_LEN(0, rf_sw_standby_mode);
-#else
-static int *rf_sw_standby_mode;
-static size_t rf_sw_standby_mode_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_standby_mode)
-
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_rx_mode)
-static int rf_sw_rx_mode[] = DT_INST_PROP(0, rf_sw_rx_mode);
-static size_t rf_sw_rx_mode_len = DT_INST_PROP_LEN(0, rf_sw_rx_mode);
-#else
-static int *rf_sw_rx_mode;
-static size_t rf_sw_rx_mode_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_rx_mode)
-
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_tx_mode)
-static int rf_sw_tx_mode[] = DT_INST_PROP(0, rf_sw_tx_mode);
-static size_t rf_sw_tx_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_mode);
-#else
-static int *rf_sw_tx_mode;
-static size_t rf_sw_tx_mode_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_tx_mode)
-
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_tx_hp_mode)
-static int rf_sw_tx_hp_mode[] = DT_INST_PROP(0, rf_sw_tx_hp_mode);
-static size_t rf_sw_tx_hp_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_hp_mode);
-#else
-static int *rf_sw_tx_hp_mode;
-static size_t rf_sw_tx_hp_mode_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_tx_hp_mode)
-
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_tx_hf_mode)
-static int rf_sw_tx_hf_mode[] = DT_INST_PROP(0, rf_sw_tx_hf_mode);
-static size_t rf_sw_tx_hf_mode_len = DT_INST_PROP_LEN(0, rf_sw_tx_hf_mode);
-#else
-static int *rf_sw_tx_hf_mode;
-static size_t rf_sw_tx_hf_mode_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_tx_hf_mode)
-
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_wifi_mode)
-static int rf_sw_wifi_mode[] = DT_INST_PROP(0, rf_sw_wifi_mode);
-static size_t rf_sw_wifi_mode_len = DT_INST_PROP_LEN(0, rf_sw_wifi_mode);
-#else
-static int *rf_sw_wifi_mode;
-static size_t rf_sw_wifi_mode_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_wifi_mode)
-
-#if DT_INST_NODE_HAS_PROP(0, rf_sw_gnss_mode)
-static int rf_sw_gnss_mode[] = DT_INST_PROP(0, rf_sw_gnss_mode);
-static size_t rf_sw_gnss_mode_len = DT_INST_PROP_LEN(0, rf_sw_gnss_mode);
-#else
-static int *rf_sw_gnss_mode;
-static size_t rf_sw_gnss_mode_len = 0;
-#endif //DT_INST_NODE_HAS_PROP(0, rf_sw_gnss_mode)
-*/
-/*
- * -----------------------------------------------------------------------------
- * --- PRIVATE FUNCTIONS DEFINITION --------------------------------------------
- */
-
-/*!
- * @brief           Creates rf switch settings from given list of strings that
- *                  were fetched from DTS.
- *
- * @param[in] list  List of strings
- * @param[in] len   Length of list
- *
- * @return  rf switch setting
- */
-static uint8_t create_rf_sw_setting(int *list, size_t len)
-{
-    uint8_t rf_sw = 0;
-
-    printk("We got rf len: %d with first entry: %d\n", len, list[0]);
-
-    for (uint8_t i = 0; i < len; i++) {
-        if (list[i] == LR11XX_DIO5) {
-            rf_sw |= LR11XX_SYSTEM_RFSW0_HIGH;
-        }
-        else if (list[i] == LR11XX_DIO6) {
-            rf_sw |= LR11XX_SYSTEM_RFSW1_HIGH;
-        }
-        else if (list[i] == LR11XX_DIO7) {
-            rf_sw |= LR11XX_SYSTEM_RFSW2_HIGH;
-        }
-        else if (list[i] == LR11XX_DIO8) {
-            rf_sw |= LR11XX_SYSTEM_RFSW3_HIGH;
-        }
-        else {
-            rf_sw = 0;
-        }
-    }
-    return rf_sw;
-}
 
 static void lr11xx_board_event_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
@@ -401,15 +285,52 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
 #define LR11XX_CFG_LNA_EN(inst)                                   \
 	.lna_en = GPIO_DT_SPEC_INST_GET(inst, gps_lna_en_gpios),
 
-#define LR11XX_CFG_RF_SW_EN(inst) 
+#define LR11XX_CFG_RF_SW_EN(inst)                                 \
+    .enable = DT_INST_PROP(inst, rf_sw_enable),                  
+
+#define LR11XX_CFG_RF_STANDBY_MODE(inst)                          \
+    .standby = DT_INST_PROP(inst, rf_sw_standby_mode), 
+
+#define LR11XX_CFG_RF_SW_RX_MODE(inst)                            \
+    .rx = DT_INST_PROP(inst, rf_sw_rx_mode),
+
+#define LR11XX_CFG_RF_SW_TX_MODE(inst)                            \
+    .tx = DT_INST_PROP(inst, rf_sw_tx_mode),
+
+#define LR11XX_CFG_RF_SW_TX_HP_MODE(inst)                         \
+    .tx_hp = DT_INST_PROP(inst, rf_sw_tx_hp_mode),
+
+#define LR11XX_CFG_RF_SW_TX_HF_MODE(inst)                         \
+    .tx_hf = DT_INST_PROP(inst, rf_sw_tx_hf_mode),
+
+#define LR11XX_CFG_RF_SW_WIFI_MODE(inst)                          \
+    .wifi = DT_INST_PROP(inst, rf_sw_wifi_mode),
+
+#define LR11XX_CFG_RF_SW_GNSS_MODE(inst)                          \
+    .gnss = DT_INST_PROP(inst, rf_sw_gnss_mode),
 
 #define LR11XX_CFG_RF_SW(inst)                                    \
     .rf_switch_cfg =                                              \
     {                                                             \
         COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_enable),	  \
 			(LR11XX_CFG_RF_SW_EN(inst)), ())			          \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_standby_mode),	  \
+			(LR11XX_CFG_RF_STANDBY_MODE(inst)), ())			      \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_rx_mode),	  \
+			(LR11XX_CFG_RF_SW_RX_MODE(inst)), ())    	          \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_tx_mode),	  \
+			(LR11XX_CFG_RF_SW_TX_MODE(inst)), ())    	          \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_tx_hp_mode),	  \
+			(LR11XX_CFG_RF_SW_TX_HP_MODE(inst)), ())    	          \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_tx_hf_mode),	  \
+			(LR11XX_CFG_RF_SW_TX_HF_MODE(inst)), ())    	          \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_wifi_mode),	  \
+			(LR11XX_CFG_RF_SW_WIFI_MODE(inst)), ())    	          \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_gnss_mode),	  \
+			(LR11XX_CFG_RF_SW_GNSS_MODE(inst)), ())    	          \
     }
 
+// EvaTODO move to DT values
 #define LR11XX_CFG_LF_CLCK(inst)                                  \
     .lf_clck_cfg = {                                              \
         .lf_clk_cfg     = LR11XX_SYSTEM_LFCLK_RC,                 \
@@ -428,6 +349,7 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
 			(LR11XX_CFG_LNA_EN(inst)), ())			              \
     LR11XX_CFG_TCXO(inst)                                         \
     LR11XX_CFG_LF_CLCK(inst)                                      \
+    LR11XX_CFG_RF_SW(inst)                                        \
     }
 
 #define LR11XX_DEFINE(inst)                                       \
