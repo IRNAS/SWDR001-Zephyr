@@ -43,6 +43,8 @@
 #include <zephyr.h>
 #include <zephyr/types.h>
 #include <zephyr/random/rand32.h>
+#include <device.h>
+#include <devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_radio.h"
@@ -59,6 +61,8 @@ LOG_MODULE_REGISTER(main);
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
+
+#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 /**
  * @brief Size of ping-pong message prefix
@@ -103,7 +107,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-static lr11xx_hal_context_t* context;
+const struct device *context;
 
 static uint8_t buffer_tx[PAYLOAD_LENGTH];
 static bool    is_master = true;
@@ -135,7 +139,7 @@ void main( void )
 {
     LOG_INF( "===== LR11xx TX CW example =====" );
 
-    context = apps_common_lr11xx_get_context( );
+    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
 

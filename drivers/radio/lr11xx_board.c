@@ -110,13 +110,6 @@ const lr11xx_radio_rssi_calibration_table_t* lr11xx_board_get_rssi_calibration_t
     }
 }
 
-//EvaTODO - do we need this
-static void lr11xx_handle_interrupt(const struct device *dev)
-{
-    struct lr11xx_hal_context_data_t *data = dev->data;
-    
-}
-
 static void lr11xx_board_event_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     struct lr11xx_hal_context_data_t *data = CONTAINER_OF(cb, struct lr11xx_hal_context_data_t, event_cb);

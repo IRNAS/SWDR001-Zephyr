@@ -61,7 +61,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define LR11XX_NODE           DT_NODELABEL(lr1110)
+#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 #define APP_PARTIAL_SLEEP true
 #define NAV_MAX_LENGTH ( 300 )

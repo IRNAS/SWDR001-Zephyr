@@ -11,7 +11,7 @@
     pinctrl-names = "default", "sleep";
 
     cs-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
-    lr1110: lr1110@0 {
+    lr1120: lr1120@0 {
         compatible = "irnas,lr11xx";
         reg = <0>;
         spi-max-frequency = <4000000>;

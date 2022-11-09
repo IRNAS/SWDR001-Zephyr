@@ -40,6 +40,8 @@
 #include <stdlib.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
+#include <device.h>
+#include <devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_board.h"
@@ -56,6 +58,7 @@ LOG_MODULE_REGISTER(main);
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
+#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 /**
  * @brief Duration of the wait between setting to RX mode and valid instant RSSI value available
@@ -90,7 +93,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-static lr11xx_hal_context_t* context;
+const struct device *context;
 
 /*
  * -----------------------------------------------------------------------------
@@ -114,7 +117,7 @@ int main( void )
 
     LOG_INF( "===== LR11xx Spectrum Display example =====\n" );
 
-    context = apps_common_lr11xx_get_context( );
+    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( ( void* ) context );
 

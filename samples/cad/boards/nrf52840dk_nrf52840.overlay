@@ -1,3 +1,4 @@
+#include <lr11xx_bindings_def.h>
 &spi1 {
     status = "disabled";
 };
@@ -10,22 +11,22 @@
     pinctrl-names = "default", "sleep";
 
     cs-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
-    lr1110: lr1110@0 {
+    lr1120: lr1120@0 {
         compatible = "irnas,lr11xx";
         reg = <0>;
         spi-max-frequency = <4000000>;
-        label = "LR1110";
+        label = "LR1120";
 
         reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
         gps-lna-en-gpios = <&gpio0 29 0>;
         busy-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
         event-gpios = <&gpio1 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN) >;
 
-        rf-sw-enable = <5 6 7>;
-        rf-sw-rx-mode = <5>;
-        rf-sw-tx-mode = <5 6>;
-        rf-sw-tx-hp-mode = <6>;
-        rf-sw-gnss-mode = <7>;
+        rf-sw-enable = <(LR11XX_DIO5 | LR11XX_DIO6 | LR11XX_DIO7)>;
+        rf-sw-rx-mode = <LR11XX_DIO5>;
+        rf-sw-tx-mode = <(LR11XX_DIO5 | LR11XX_DIO6)>;
+        rf-sw-tx-hp-mode = <LR11XX_DIO6>;
+        rf-sw-gnss-mode = <LR11XX_DIO7>;
     };
 };
 

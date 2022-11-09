@@ -2,6 +2,8 @@
 #include <string.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
+#include <device.h>
+#include <devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_radio.h"
@@ -12,8 +14,9 @@
 #include <logging/log.h>
 LOG_MODULE_REGISTER(main);
 
+#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
-static lr11xx_hal_context_t* context;
+const struct device *context;
 static lr11xx_gnss_context_status_bytestream_t context_status_buffer;
 lr11xx_gnss_context_status_t context_status;
 
@@ -26,7 +29,7 @@ void main( void )
 
     LOG_INF( "===== LR11xx Almanac Update =====" );
 
-    context = apps_common_lr11xx_get_context( );
+    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
     apps_common_lr11xx_fetch_and_print_version( context );

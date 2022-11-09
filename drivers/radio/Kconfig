@@ -9,7 +9,7 @@ menuconfig LR11XX_LIB
 if LR11XX_LIB
 
 config LR11XX_LIB_SHELL
-  bool "Enable shell command for lr1110 lib"
+  bool "Enable shell command for lr11xx lib"
   depends on SHELL
 
 config LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC

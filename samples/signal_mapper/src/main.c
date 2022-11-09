@@ -4,6 +4,8 @@
 #include <zephyr.h>
 #include <zephyr/types.h>
 #include <zephyr/random/rand32.h>
+#include <device.h>
+#include <devicetree.h>
 
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/hci.h>
@@ -22,6 +24,8 @@ LOG_MODULE_REGISTER(main);
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
+
+#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 #define RX_TIMEOUT_VALUE 600
 
@@ -116,7 +120,7 @@ typedef struct radio_config {
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-static lr11xx_hal_context_t* context; //LR context
+const struct device *context; //LR context
 
 static radio_config config; //LR modifiable config options
 
@@ -266,7 +270,7 @@ void main( void )
     initialize_bt_adv();
    
     /* Get DT implementation and init peripherals */
-    context = apps_common_lr11xx_get_context( );
+    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     /* General system init */
     apps_common_lr11xx_system_init( context );
@@ -588,6 +592,8 @@ static int ping_pong_radio_reinit( void )
     {
         LOG_ERR("Failed set lora mod params.");
     }
+
+    return ret;
 }
 
 static void ping_pong_lr11xx_receive( const void* context, uint8_t* buffer, uint8_t* size, uint32_t* rx_count )

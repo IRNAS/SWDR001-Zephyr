@@ -16,7 +16,7 @@ response = requests.get(URL, headers = {'Ocp-Apim-Subscription-Key': AUTH_TOKEN}
 raw_almanac = response.json()['result']['almanac_image'].encode()
 almanac_bin = decodebytes(raw_almanac)
 
-# Path to lacuna_lr1110_almanac.h file
+# Path to lr11xx_almanac.h file
 path_h = 'lr11xx_almanac.h'
 path_c = 'lr11xx_almanac.c'
 

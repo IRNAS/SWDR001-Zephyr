@@ -42,6 +42,8 @@
 #include <stdlib.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
+#include <device.h>
+#include <devicetree.h>
 
 #include "main_cad.h"
 #include "apps_common.h"
@@ -58,6 +60,8 @@ LOG_MODULE_REGISTER(main);
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
+
+#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 /**
  * @brief LR11xx interrupt mask used by the application
@@ -89,7 +93,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-static lr11xx_hal_context_t* context;
+const struct device *context;
 
 static lr11xx_radio_cad_params_t cad_params = {
     .cad_symb_nb     = CAD_SYMBOL_NUM,
@@ -134,7 +138,7 @@ int main( void )
     LOG_INF( "===== LR11xx CAD example =====\n" );
 
 
-    context = apps_common_lr11xx_get_context( );
+    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( ( void* ) context );
 
