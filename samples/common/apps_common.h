@@ -73,10 +73,12 @@ void apps_common_lr11xx_receive( const void* context, uint8_t* buffer, uint8_t* 
 /*!
  * @brief Interface to enable hardware interruption
  *
+ * @param [in] context  Pointer to the radio context
+ *
  * @warning This function must be called to enable hardware interruption and 'irq_fired' flag will be triggered to
  * indicate interruption, then 'apps_common_lr11xx_irq_process' in main loop will be executed.
  */
-void apps_common_lr11xx_enable_irq( void );
+void apps_common_lr11xx_enable_irq( const void* context );
 
 /*!
  * @brief Interface to lr11xx interrupt processing routine

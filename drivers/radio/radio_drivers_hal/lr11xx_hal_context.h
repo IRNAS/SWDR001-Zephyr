@@ -43,7 +43,11 @@ extern "C" {
  * --- PUBLIC TYPES ------------------------------------------------------------
  */
 
-typedef void (*lr11xx_event_cb_t)(void);
+/**
+ * @brief Callback upon firing event trigger
+ * 
+ */
+typedef void (*lr11xx_event_cb_t)(const struct device *dev);
 
 struct lr11xx_hal_context_tcxo_cfg_t
 {
@@ -80,9 +84,19 @@ struct lr11xx_hal_context_cfg_t
 
 struct lr11xx_hal_context_data_t
 {
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER
+    const struct device *lr11xx_dev; 
     struct gpio_callback event_cb;          /* event callback structure */
     lr11xx_event_cb_t event_interrupt_cb;   /* event interrupt provided callback */
-    //const struct device *lr11xx_dev;
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
+    struct k_work work;
+#endif //LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER_OWN_THREAD
+    K_THREAD_STACK_MEMBER(thread_stack, CONFIG_LR11XX_THREAD_STACK_SIZE);
+	struct k_thread thread;
+	struct k_sem trig_sem;
+#endif //CONFIG_LR11XX_EVENT_TRIGGER_OWN_THREAD
+#endif //CONFIG_LR11XX_EVENT_TRIGGER
 };
 
 /*

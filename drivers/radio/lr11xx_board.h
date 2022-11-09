@@ -6,7 +6,6 @@
  * COPYRIGHT NOTICE: (c) 2022 Irnas. All rights reserved.
  */
 
-
 #ifndef LR11XX_BOARD_H
 #define LR11XX_BOARD_H
 
@@ -26,10 +25,13 @@ typedef struct lr11xx_board_pa_pwr_cfg_t
     lr11xx_radio_pa_cfg_t pa_config;
 } lr11xx_board_pa_pwr_cfg_t;
 
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC FUNCTIONS PROTOTYPES ---------------------------------------------
+/**
+ * @brief Attach interrupt cb to event pin.
+ * 
+ * @param dev context
+ * @param cb cb function
  */
+void lr11xx_board_attach_interrupt(const struct device *dev, lr11xx_event_cb_t cb);
 
 /**
  * @brief Enable interrupt on event pin.
@@ -44,13 +46,6 @@ void lr11xx_board_enable_interrupt(const struct device *dev);
  * @param context
  */
 void lr11xx_board_disable_interrupt(const struct device *dev);
-
-/**
- * @brief Return HW specific reg mode.
- *
- * @return lr11xx_system_reg_mode_t
- */
-lr11xx_system_reg_mode_t lr11xx_board_get_reg_mode( void );
 
 /*!
  * @brief Return the RSSI calibration table corresponding to a given RF frequency

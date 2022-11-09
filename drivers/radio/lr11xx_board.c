@@ -94,56 +94,6 @@ static const lr11xx_radio_rssi_calibration_table_t rssi_calibration_table_above_
                      .g13hp7 = 9 },
 };
 
-
-static void lr11xx_board_event_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    struct lr11xx_hal_context_data_t *data = CONTAINER_OF(cb, struct lr11xx_hal_context_data_t, event_cb);
-    const struct lr11xx_hal_context_cfg_t *config = dev->config;
-
-    if ((pins & BIT(config->event.pin)) == 0U) 
-    {
-		return;
-	}
-    
-    if (gpio_pin_get_dt(&config->event))
-    {
-        /* Wait for value to drop */
-        gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_LEVEL_INACTIVE);
-        /* Call provided callback - EvaTODO take from device*/
-        if (data->event_interrupt_cb != NULL)
-        {
-            data->event_interrupt_cb();
-        }
-    }
-    else
-    {
-        gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_LEVEL_ACTIVE);
-    }
-}
-
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC FUNCTIONS DEFINITION ---------------------------------------------
- */
-
-void lr11xx_board_enable_interrupt(const struct device *dev)
-{
-    const struct lr11xx_hal_context_cfg_t *config = dev->config;
-    gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_LEVEL_ACTIVE); 
-}
-
-void lr11xx_board_disable_interrupt(const struct device *dev)
-{
-    const struct lr11xx_hal_context_cfg_t *config = dev->config;
-    gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_DISABLE); 
-}
-
-//EvaTODO - move to device 
-lr11xx_system_reg_mode_t lr11xx_board_get_reg_mode( void )
-{
-    return LR11XX_SYSTEM_REG_MODE_DCDC;
-}
-
 const lr11xx_radio_rssi_calibration_table_t* lr11xx_board_get_rssi_calibration_table( const uint32_t freq_in_hz )
 {
     if( freq_in_hz < 600000000 )
@@ -160,6 +110,103 @@ const lr11xx_radio_rssi_calibration_table_t* lr11xx_board_get_rssi_calibration_t
     }
 }
 
+//EvaTODO - do we need this
+static void lr11xx_handle_interrupt(const struct device *dev)
+{
+    struct lr11xx_hal_context_data_t *data = dev->data;
+    
+}
+
+static void lr11xx_board_event_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+    struct lr11xx_hal_context_data_t *data = CONTAINER_OF(cb, struct lr11xx_hal_context_data_t, event_cb);
+    const struct lr11xx_hal_context_cfg_t *config = data->lr11xx_dev->config;
+
+    if ((pins & BIT(config->event.pin)) == 0U) 
+    {
+        return;
+	}
+    
+    if (gpio_pin_get_dt(&config->event))
+    {
+        /* Wait for value to drop */
+        gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_LEVEL_INACTIVE);
+        /* Call provided callback */
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER_OWN_THREAD
+	    k_sem_give(&data->gpio_sem);
+#elif CONFIG_LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
+        k_work_submit(&data->work);
+#endif 
+    }
+    else
+    {
+        gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_LEVEL_ACTIVE);
+    }
+}
+
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER_OWN_THREAD
+static void lr11xx_thread(struct lr11xx_hal_context_data_t *data)
+{
+	while (1) {
+		k_sem_take(&data->gpio_sem, K_FOREVER);
+		if(data->event_interrupt_cb)
+        {
+            data->event_interrupt_cb(data->lr11xx_dev);
+        }
+	}
+}
+#endif /* CONFIG_LR11XX_EVENT_TRIGGER_OWN_THREAD */
+
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
+static void lr11xx_work_cb(struct k_work *work)
+{
+	struct lr11xx_hal_context_data_t *data = CONTAINER_OF(work, struct lr11xx_hal_context_data_t, work);
+	if(data->event_interrupt_cb)
+    {
+        data->event_interrupt_cb(data->lr11xx_dev);
+    }
+}
+#endif /* CONFIG_LR11XX_EVENT_TRIGGER_GLOBAL_THREAD */
+
+void lr11xx_board_attach_interrupt(const struct device *dev, lr11xx_event_cb_t cb)
+{
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER
+    struct lr11xx_hal_context_data_t *data = dev->data;
+    data->event_interrupt_cb = cb;
+#else
+    LOG_ERR("Event trigger not supported!");
+#endif //CONFIG_LR11XX_EVENT_TRIGGER  
+}
+
+void lr11xx_board_enable_interrupt(const struct device *dev)
+{
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER
+    const struct lr11xx_hal_context_cfg_t *config = dev->config;
+    gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_LEVEL_ACTIVE);
+#else
+    LOG_ERR("Event trigger not supported!");
+#endif //CONFIG_LR11XX_EVENT_TRIGGER  
+}
+
+void lr11xx_board_disable_interrupt(const struct device *dev)
+{
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER
+    const struct lr11xx_hal_context_cfg_t *config = dev->config;
+    gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_DISABLE); 
+#else
+    LOG_ERR("Event trigger not supported!");
+#endif //CONFIG_LR11XX_EVENT_TRIGGER  
+}
+
+
+
+/**
+ * @brief Initialise lr11xx.
+ * Initialise all GPIOs and configure interrupt on event pin.
+ * 
+ * @param dev 
+ * @return int 
+ */
 static int lr11xx_init(const struct device *dev)
 {
     const struct lr11xx_hal_context_cfg_t *config = dev->config;
@@ -213,8 +260,24 @@ static int lr11xx_init(const struct device *dev)
 		return ret;
 	}
 
-    // Configure interrupt
-    //gpio_pin_interrupt_configure_dt(&config->event, GPIO_INT_LEVEL_ACTIVE); 
+    data->lr11xx_dev = dev;
+
+    //Event pin trigger config
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER   
+#ifdef CONFIG_LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
+    LOG_INF("Event trigger set in global thread.");
+    data->work.handler = lr11xx_work_cb;
+#elif CONFIG_LR11XX_EVENT_TRIGGER_OWN_THREAD
+    LOG_INF("Event trigger set in own thread.");
+    k_sem_init(&data->trig_sem, 0, K_SEM_MAX_LIMIT);
+
+	k_thread_create(&data->thread, data->thread_stack,
+		       CONFIG_LR11XX_THREAD_STACK_SIZE,
+		       (k_thread_entry_t)lr11xx_thread, data,
+		       NULL, NULL, K_PRIO_COOP(CONFIG_LR11XX_THREAD_PRIORITY),
+		       0, K_NO_WAIT);
+#endif //CONFIG_LR11XX_EVENT_TRIGGER_OWN_THREAD
+    
     // Init callback
     gpio_init_callback(&data->event_cb, lr11xx_board_event_callback, BIT(config->event.pin));
     // Add callback
@@ -222,19 +285,8 @@ static int lr11xx_init(const struct device *dev)
     {
         LOG_ERR("Could not set event pin callback");
 		return -EIO;
-    } 
-
-	/*
-    config->rf_switch_cfg.enable  = create_rf_sw_setting(rf_sw_enable, rf_sw_enable_len);
-	config->rf_switch_cfg.standby = create_rf_sw_setting(rf_sw_standby_mode, rf_sw_standby_mode_len);
-	config->rf_switch_cfg.rx      = create_rf_sw_setting(rf_sw_rx_mode, rf_sw_rx_mode_len);
-	config->rf_switch_cfg.tx      = create_rf_sw_setting(rf_sw_tx_mode, rf_sw_tx_mode_len);
-	config->rf_switch_cfg.tx_hp   = create_rf_sw_setting(rf_sw_tx_hp_mode, rf_sw_tx_hp_mode_len);
-	config->rf_switch_cfg.tx_hf   = create_rf_sw_setting(rf_sw_tx_hf_mode, rf_sw_tx_hf_mode_len);
-	config->rf_switch_cfg.wifi    = create_rf_sw_setting(rf_sw_wifi_mode, rf_sw_wifi_mode_len);
-	config->rf_switch_cfg.gnss    = create_rf_sw_setting(rf_sw_gnss_mode, rf_sw_gnss_mode_len);
-    */
-
+    }
+#endif //CONFIG_LR11XX_EVENT_TRIGGER
    return ret;
     
 }
@@ -326,7 +378,7 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
 			(LR11XX_CFG_RF_SW_TX_HF_MODE(inst)), ())    	          \
         COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_wifi_mode),	  \
 			(LR11XX_CFG_RF_SW_WIFI_MODE(inst)), ())    	          \
-        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_gnss_mode),	  \
+        COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, rf_sw_gnss_mode), \
 			(LR11XX_CFG_RF_SW_GNSS_MODE(inst)), ())    	          \
     }
 
@@ -337,12 +389,13 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
         .wait_32k_ready = true,                                   \
     },
 
-#define LR11XX_CONFIG(inst)                                      \
+#define LR11XX_CONFIG(inst)                                       \
     {                                                             \
     .spi = SPI_DT_SPEC_INST_GET(inst, LR11XX_SPI_OPERATION, 0),   \
     .busy = GPIO_DT_SPEC_INST_GET(inst, busy_gpios),              \
     .reset = GPIO_DT_SPEC_INST_GET(inst, reset_gpios),            \
     .event = GPIO_DT_SPEC_INST_GET(inst, event_gpios),            \
+    .reg_mode = LR11XX_SYSTEM_REG_MODE_DCDC,                      \
     COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, pwr_en_gpios),	      \
 			(LR11XX_CFG_PWR_EN(inst)), ())			              \
     COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, gps_lna_en_gpios),    \
@@ -353,7 +406,7 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
     }
 
 #define LR11XX_DEFINE(inst)                                       \
-    static struct lr11xx_hal_context_data_t lr11xx_data_##inst;               \
+    static struct lr11xx_hal_context_data_t lr11xx_data_##inst;   \
     static const struct lr11xx_hal_context_cfg_t lr11xx_config_##inst =  \
     LR11XX_CONFIG(inst);                                          \
     PM_DEVICE_DT_INST_DEFINE(inst, lr11xx_pm_action);             \

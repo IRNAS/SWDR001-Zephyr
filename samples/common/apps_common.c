@@ -64,7 +64,7 @@ void print_lora_configuration( void );
  */
 void print_gfsk_configuration( void );
 
-void radio_on_dio_irq( void );
+void radio_on_dio_irq( const struct device *dev );
 void on_tx_done( void ) __attribute__( ( weak ) );
 void on_rx_done( void ) __attribute__( ( weak ) );
 void on_rx_timeout( void ) __attribute__( ( weak ) );
@@ -88,9 +88,6 @@ void on_gnss_scan_done( void ) __attribute__( ( weak ) );
  * --- PUBLIC FUNCTIONS DEFINITION ---------------------------------------------
  */
 
-/* Set interrupt callback - EvaTODO*/
-// context->event_interrupt_cb = radio_on_dio_irq;
-
 void apps_common_lr11xx_system_init( const struct device* context )
 {
     int ret = 0;
@@ -104,7 +101,7 @@ void apps_common_lr11xx_system_init( const struct device* context )
     }
 
     // Configure the regulator
-    const lr11xx_system_reg_mode_t regulator = lr11xx_board_get_reg_mode();
+    const lr11xx_system_reg_mode_t regulator = config->reg_mode;
     ret = lr11xx_system_set_reg_mode( ( void* ) context, regulator );
     if(ret)
     {
@@ -120,7 +117,7 @@ void apps_common_lr11xx_system_init( const struct device* context )
     }
 
     // Configure the 32MHz TCXO if it is available on the board
-    const struct lr11xx_hal_context_tcxo_cfg_t tcxo_cfg; // EvaTODO - get from device structure = lr11xx_board_get_tcxo_cfg( );
+    const struct lr11xx_hal_context_tcxo_cfg_t tcxo_cfg = config->tcxo_cfg;
     if( tcxo_cfg.has_tcxo == true )
     {
         const uint32_t timeout_rtc_step = lr11xx_radio_convert_time_in_ms_to_rtc_step( tcxo_cfg.timeout_ms );
@@ -132,7 +129,7 @@ void apps_common_lr11xx_system_init( const struct device* context )
     }
 
     // Configure the Low Frequency Clock
-    const struct lr11xx_hal_context_lf_clck_cfg_t lf_clk_cfg; // EvaTODO - get from device structure = lr11xx_board_get_lf_clk_cfg( );
+    const struct lr11xx_hal_context_lf_clck_cfg_t lf_clk_cfg = config->lf_clck_cfg;
     ret = lr11xx_system_cfg_lfclk( context, lf_clk_cfg.lf_clk_cfg, lf_clk_cfg.wait_32k_ready );
     if(ret)
     {
@@ -374,6 +371,12 @@ void apps_common_lr11xx_receive( const void* context, uint8_t* buffer, uint8_t* 
     }
 }
 
+void apps_common_lr11xx_enable_irq( const void* context )
+{
+    lr11xx_board_attach_interrupt(context, radio_on_dio_irq);
+    lr11xx_board_enable_interrupt(context);
+}
+
 void apps_common_lr11xx_irq_process( const void* context, lr11xx_system_irq_mask_t irq_filter_mask )
 {
     if( irq_fired == true )
@@ -546,7 +549,7 @@ void print_gfsk_configuration( void )
     LOG_INF( " " );
 }
 
-void radio_on_dio_irq( void )
+void radio_on_dio_irq( const struct device *dev )
 {
     irq_fired = true;
     LOG_DBG("Irq fired");

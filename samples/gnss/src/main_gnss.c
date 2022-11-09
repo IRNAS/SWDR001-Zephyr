@@ -42,6 +42,8 @@
 #include <stdlib.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
+#include <device.h>
+#include <devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_system.h"
@@ -58,6 +60,8 @@ LOG_MODULE_REGISTER(main);
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
+
+#define LR11XX_NODE           DT_NODELABEL(lr1110)
 
 #define APP_PARTIAL_SLEEP true
 #define NAV_MAX_LENGTH ( 300 )
@@ -82,7 +86,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-static lr11xx_hal_context_t* context;
+const struct device *context;
 static uint32_t              number_of_scan = 0;
 
 /*
@@ -126,7 +130,7 @@ int main( void )
 {
     LOG_INF( "===== %s =====\n", gnss_get_example_name( ) );
 
-    context = apps_common_lr11xx_get_context( );
+    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
 
@@ -148,7 +152,7 @@ int main( void )
         LOG_ERR("Failed to set dio irq params.");
     }
 
-    lr11xx_board_enable_interrupt(context);
+    apps_common_lr11xx_enable_irq(context);
 
     gnss_init( context );
     start_scan( );

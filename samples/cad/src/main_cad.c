@@ -156,7 +156,7 @@ int main( void )
         LOG_ERR("Failed to set dio irq params.");
     }
 
-    lr11xx_board_enable_interrupt(context);
+    apps_common_lr11xx_enable_irq(context);
 
     if( cad_params.cad_exit_mode == LR11XX_RADIO_CAD_EXIT_MODE_RX )
     {

@@ -197,7 +197,7 @@ int main( void )
         LOG_ERR("Failed to set dio irq params.");
     }
 
-    lr11xx_board_enable_interrupt(context);
+    apps_common_lr11xx_enable_irq(context);
 
     // Check that the Wi-Fi format and Wi-Fi scan mode are compatible before starting the example
     const bool is_compatible = lr11xx_wifi_are_scan_mode_result_format_compatible( WIFI_SCAN_MODE, WIFI_RESULT_FORMAT );
