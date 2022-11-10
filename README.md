@@ -4,14 +4,14 @@ IRNAS port of the Semtech SWDR001 LR11XX driver to Zephyr. Original package prop
 ## Folder structure
 Driver is located in the `drivers/radio` folder where `lr11xx_driver` contains Semtech SWDR001 LR11XX driver files and Zephy compatible hal implementation is contained in the `radio_drivers_hal` folder. Board specific interface functions and defined in the `lr11xx_board.h` and `lr11xx_board.c` files. 
 
-Compatible Device Tree bing is contained in the `dts` folder. 
+Compatible Device Tree bing is contained in the `dts` folder. To use pre-defined macros for RF switches in DT binding, file lr11xx_bindings_def.h needs to be included in DT file.
 
-`samples` folder contains functionality samples. Only `tx_cw` if functional at the moment. 
+`samples` folder contains functionality samples, compatible with SWSD003 Semtech examples. Additional example for almanac update is added. 
 
 ## Installation
 This driver was written and tested for nrf-sdk v2.0.1
 
-To install, first modify `.../ncs/nrf/west.yml` and add the following sections:
+To install, modify your project's `west.yml` and add the following sections:
 
 1. In `remotes`, add the following if not already added:
 
@@ -33,6 +33,42 @@ To install, first modify `.../ncs/nrf/west.yml` and add the following sections:
 Then run `west update` in your freshly created bash/command prompt session.
 
 Above command will clone `SWDR001-Zephyr` repository inside of `ncs/irnas/`. You can now use the driver in your application projects.
+
+## Usage
+Compatible Device Tree bing for `lr11xx` needs to be added to DT file, for example:
+
+```
+&spi2 {
+    cs-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
+    lr1120: lr1120@0 {
+        compatible = "irnas,lr11xx";
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+        label = "LR1120";
+
+        reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+        gps-lna-en-gpios = <&gpio0 29 0>;
+        busy-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
+        event-gpios = <&gpio1 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN) >;
+
+        rf-sw-enable = <(LR11XX_DIO5 | LR11XX_DIO6 | LR11XX_DIO7)>;
+        rf-sw-rx-mode = <LR11XX_DIO5>;
+        rf-sw-tx-mode = <(LR11XX_DIO5 | LR11XX_DIO6)>;
+        rf-sw-tx-hp-mode = <LR11XX_DIO6>;
+        rf-sw-gnss-mode = <LR11XX_DIO7>;
+    };
+};
+```
+
+LR11XX device structure can them be accesed trough device binding:
+
+```
+#define LR11XX_NODE           DT_NODELABEL(lr1120)
+const struct device *context;
+
+context = device_get_binding(DT_LABEL(LR11XX_NODE));
+```
+
 ## SWDR001 LR11XX driver Components
 
 The driver is split in several components:

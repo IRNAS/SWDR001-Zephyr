@@ -1,13 +1,12 @@
-/**
- * @file lr11xx_bindings_def.h
- * @author IRNAS Ltd
- * @brief Macro defines to be used in DeviceTree node definitions. 
- * @version 0.1
- * @date 2022-11-09
+
+/** @file lr11xx_bindings_def.h
+ *
+ * @brief 
  * 
- * @copyright Copyright (c) 2022
- * 
+ * @par
+ * COPYRIGHT NOTICE: (c) 2022 Irnas. All rights reserved.
  */
+
 #ifndef ZEPHYR_INCLUDE_DT_BINDINGS_LR11XX_H_
 #define ZEPHYR_INCLUDE_DT_BINDINGS_LR11XX_H_
 

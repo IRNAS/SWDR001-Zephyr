@@ -52,6 +52,7 @@ properties:
         This signal is active-high as interpreted by lr11xx.
 
     # RF configuration (DIO pins 5 through 8)
+    # For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to be added to DT file!
 
     rf-sw-enable:
       type: int
@@ -67,6 +68,8 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
     rf-sw-standby-mode:
       type: int
@@ -83,6 +86,8 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
     rf-sw-rx-mode:
       type: int
@@ -99,6 +104,8 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
     rf-sw-tx-mode:
       type: int
@@ -115,6 +122,8 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
     rf-sw-tx-hp-mode:
       type: int
@@ -131,6 +140,8 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
     rf-sw-tx-hf-mode:
       type: int
@@ -147,6 +158,8 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
     rf-sw-wifi-mode:
       type: int
@@ -163,6 +176,8 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
     rf-sw-gnss-mode:
       type: int
@@ -179,5 +194,7 @@ properties:
         Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
         If none of the RFSW/DIO pins do not need to be enabled then do not set the
         value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
 
 

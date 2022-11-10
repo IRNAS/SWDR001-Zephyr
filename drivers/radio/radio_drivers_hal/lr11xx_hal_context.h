@@ -82,12 +82,16 @@ struct lr11xx_hal_context_cfg_t
     lr11xx_system_reg_mode_t reg_mode;
 };
 
+/**
+ * @brief lr11xx context device data structure
+ * 
+ */
 struct lr11xx_hal_context_data_t
 {
 #ifdef CONFIG_LR11XX_EVENT_TRIGGER
     const struct device *lr11xx_dev; 
     struct gpio_callback event_cb;          /* event callback structure */
-    lr11xx_event_cb_t event_interrupt_cb;   /* event interrupt provided callback */
+    lr11xx_event_cb_t event_interrupt_cb;   /* event interrupt user provided callback */
 #ifdef CONFIG_LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
     struct k_work work;
 #endif //LR11XX_EVENT_TRIGGER_GLOBAL_THREAD

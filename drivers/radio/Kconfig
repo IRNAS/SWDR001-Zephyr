@@ -4,7 +4,7 @@ menuconfig LR11XX_LIB
     help
         This library can handle one instance of lr1110/lr1120 chip present on the
         board.
-        It implements basic modem lr10xx driver.
+        It implements basic modem lr10xx radio driver.
 
 if LR11XX_LIB
 

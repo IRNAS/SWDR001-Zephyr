@@ -110,6 +110,13 @@ const lr11xx_radio_rssi_calibration_table_t* lr11xx_board_get_rssi_calibration_t
     }
 }
 
+/**
+ * @brief Event pin callback handler. 
+ * 
+ * @param dev 
+ * @param cb 
+ * @param pins 
+ */
 static void lr11xx_board_event_callback(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     struct lr11xx_hal_context_data_t *data = CONTAINER_OF(cb, struct lr11xx_hal_context_data_t, event_cb);
@@ -285,6 +292,14 @@ static int lr11xx_init(const struct device *dev)
 }
 
 #if IS_ENABLED(CONFIG_PM_DEVICE)
+/**
+ * @brief Power management action define.
+ * Not implemented yet.
+ * 
+ * @param dev 
+ * @param action 
+ * @return int 
+ */
 static int lr11xx_pm_action(const struct device *dev, enum pm_device_action action)
 {
     int ret = 0;
@@ -315,14 +330,6 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
         POST_KERNEL,                                              \
         CONFIG_LR11XX_INIT_PRIORITY,                              \
         NULL);
-
-// EvaTODO move to DT values
-#define LR11XX_CFG_TCXO(inst)                                     \
-    .tcxo_cfg = {                                                 \
-        .has_tcxo   = true,                                       \
-        .supply     = LR11XX_SYSTEM_TCXO_CTRL_1_8V,               \
-        .timeout_ms = BOARD_TCXO_WAKEUP_TIME,                     \
-    },
 
 #define LR11XX_CFG_PWR_EN(inst)                                   \
 	.pwr_en = GPIO_DT_SPEC_INST_GET(inst, pwr_en_gpios),		  
@@ -375,11 +382,17 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
 			(LR11XX_CFG_RF_SW_GNSS_MODE(inst)), ())    	          \
     }
 
-// EvaTODO move to DT values
 #define LR11XX_CFG_LF_CLCK(inst)                                  \
     .lf_clck_cfg = {                                              \
         .lf_clk_cfg     = LR11XX_SYSTEM_LFCLK_RC,                 \
         .wait_32k_ready = true,                                   \
+    },
+
+#define LR11XX_CFG_TCXO(inst)                                     \
+    .tcxo_cfg = {                                                 \
+        .has_tcxo   = true,                                       \
+        .supply     = LR11XX_SYSTEM_TCXO_CTRL_1_8V,               \
+        .timeout_ms = BOARD_TCXO_WAKEUP_TIME,                     \
     },
 
 #define LR11XX_CONFIG(inst)                                       \
