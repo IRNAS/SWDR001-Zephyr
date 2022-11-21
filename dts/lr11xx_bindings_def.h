@@ -1,8 +1,8 @@
 
 /** @file lr11xx_bindings_def.h
  *
- * @brief 
- * 
+ * @brief Defines for simpler lr11xx configuration it DT files.
+ *
  * @par
  * COPYRIGHT NOTICE: (c) 2022 Irnas. All rights reserved.
  */
@@ -16,4 +16,4 @@
 #define LR11XX_DIO8 (1 << 3)
 #define LR11XX_DIO9 (1 << 4)
 
-#endif //ZEPHYR_INCLUDE_DT_BINDINGS_LR11XX_H_
+#endif /* ZEPHYR_INCLUDE_DT_BINDINGS_LR11XX_H_*/

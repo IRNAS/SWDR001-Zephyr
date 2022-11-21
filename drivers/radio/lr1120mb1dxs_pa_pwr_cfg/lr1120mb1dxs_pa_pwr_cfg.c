@@ -266,7 +266,7 @@ const lr11xx_board_pa_pwr_cfg_t pa_cfg_table[LR1120MB1DXS_MAX_PWR - LR1120MB1DXS
         },
     },
     {  // Expected output power = 5dBm
-        .power = 9, 
+        .power = 9,
         .pa_config = {
             .pa_sel        = LR11XX_RADIO_PA_SEL_LP,
             .pa_reg_supply = LR11XX_RADIO_PA_REG_SUPPLY_VREG,

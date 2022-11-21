@@ -13,21 +13,20 @@
 extern "C" {
 #endif
 
-#include <zephyr.h>
-#include <device.h>
 #include "lr11xx_hal_context.h"
-#include "lr11xx_types.h"
 #include "lr11xx_radio_types.h"
+#include "lr11xx_types.h"
+#include <device.h>
+#include <zephyr.h>
 
-typedef struct lr11xx_board_pa_pwr_cfg_t
-{
-    int8_t                power;
-    lr11xx_radio_pa_cfg_t pa_config;
+typedef struct lr11xx_board_pa_pwr_cfg_t {
+	int8_t power;
+	lr11xx_radio_pa_cfg_t pa_config;
 } lr11xx_board_pa_pwr_cfg_t;
 
 /**
  * @brief Attach interrupt cb to event pin.
- * 
+ *
  * @param dev context
  * @param cb cb function
  */
@@ -54,7 +53,8 @@ void lr11xx_board_disable_interrupt(const struct device *dev);
  *
  * @return The RSSI calibration table
  */
-const lr11xx_radio_rssi_calibration_table_t* lr11xx_board_get_rssi_calibration_table( const uint32_t freq_in_hz );
+const lr11xx_radio_rssi_calibration_table_t *
+lr11xx_board_get_rssi_calibration_table(const uint32_t freq_in_hz);
 
 /*!
  * @brief Get the power amplifier configuration given a RF frequency and output power
@@ -65,11 +65,11 @@ const lr11xx_radio_rssi_calibration_table_t* lr11xx_board_get_rssi_calibration_t
  * @returns Pointer to a structure holding the expected configuration.
  * Can be NULL if no configuration found for given arguments.
  */
-const lr11xx_board_pa_pwr_cfg_t* lr11xx_board_get_pa_pwr_cfg( const uint32_t rf_freq_in_hz,
-                                                          int8_t         expected_output_pwr_in_dbm );
+const lr11xx_board_pa_pwr_cfg_t *lr11xx_board_get_pa_pwr_cfg(const uint32_t rf_freq_in_hz,
+							     int8_t expected_output_pwr_in_dbm);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // LR11XX_BOARD_H
+#endif // LR11XX_BOARD_H
