@@ -4,13 +4,9 @@ menuconfig LR11XX_LIB
     help
         This library can handle one instance of lr1110/lr1120 chip present on the
         board.
-        It implements basic modem lr10xx radio driver.
+        It implements basic lr11xx radio driver.
 
 if LR11XX_LIB
-
-config LR11XX_LIB_SHELL
-  bool "Enable shell command for lr11xx lib"
-  depends on SHELL
 
 config LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC
 	int "Busy pin wait time"
@@ -62,7 +58,7 @@ config LR11XX_THREAD_STACK_SIZE
 	default 1024
 	help
 	  Stack size of thread used by the driver to handle interrupts.
-  
+
 module = LR11XX
 module-str = lr11xx
 source "subsys/logging/Kconfig.template.log_config"
