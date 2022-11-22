@@ -66,14 +66,14 @@ static void prv_lr11xx_hal_check_device_ready(const struct device *dev)
 	const struct lr11xx_hal_context_cfg_t *lr11xx_cfg = dev->config;
 
 	if (radio_mode != RADIO_SLEEP) {
-		lr11xx_hal_wait_on_busy(&lr11xx_cfg->busy);
+		prv_lr11xx_hal_wait_on_busy(&lr11xx_cfg->busy);
 	} else {
 		// Busy is HIGH in sleep mode, wake-up the device with a small glitch on NSS
 		const struct spi_cs_control *ctrl = lr11xx_cfg->spi.config.cs;
 
 		gpio_pin_set_dt(&ctrl->gpio, 1);
 		gpio_pin_set_dt(&ctrl->gpio, 0);
-		lr11xx_hal_wait_on_busy(&lr11xx_cfg->busy);
+		prv_lr11xx_hal_wait_on_busy(&lr11xx_cfg->busy);
 		radio_mode = RADIO_AWAKE;
 	}
 }
@@ -128,7 +128,7 @@ lr11xx_hal_status_t lr11xx_hal_write(const void *context, const uint8_t *command
 		return LR11XX_HAL_STATUS_OK;
 	}
 
-	return lr11xx_hal_wait_on_busy(&lr11xx_cfg->busy);
+	return prv_lr11xx_hal_wait_on_busy(&lr11xx_cfg->busy);
 }
 
 lr11xx_hal_status_t lr11xx_hal_direct_read(const void *context, uint8_t *data,
