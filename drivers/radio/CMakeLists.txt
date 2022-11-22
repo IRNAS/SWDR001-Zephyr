@@ -1,6 +1,9 @@
 zephyr_include_directories(.)
 zephyr_library()
 
+# disable warning from lib
+zephyr_library_compile_definitions(LR11XX_DISABLE_WARNINGS)
+
 zephyr_library_sources(lr11xx_board.c)
 zephyr_library_sources(lr1120mb1dxs_pa_pwr_cfg/lr1120mb1dxs_pa_pwr_cfg.c)
 
