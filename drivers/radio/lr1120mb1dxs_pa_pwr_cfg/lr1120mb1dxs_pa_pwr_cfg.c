@@ -66,7 +66,7 @@
 #define LR1120MB1DXS_MAX_PWR_PA_HF 13
 
 // PA config table
-const lr11xx_board_pa_pwr_cfg_t pa_cfg_table[LR1120MB1DXS_MAX_PWR - LR1120MB1DXS_MIN_PWR + 1] = {
+static const lr11xx_board_pa_pwr_cfg_t pa_cfg_table[LR1120MB1DXS_MAX_PWR - LR1120MB1DXS_MIN_PWR + 1] = {
     { // Expected output power = -17dBm
         .power = -15,
         .pa_config = {
@@ -429,7 +429,7 @@ const lr11xx_board_pa_pwr_cfg_t pa_cfg_table[LR1120MB1DXS_MAX_PWR - LR1120MB1DXS
     },
 };
 
-const lr11xx_board_pa_pwr_cfg_t pa_hf_cfg_table[LR1120MB1DXS_MAX_PWR_PA_HF - LR1120MB1DXS_MIN_PWR_PA_HF + 1] = {
+static const lr11xx_board_pa_pwr_cfg_t pa_hf_cfg_table[LR1120MB1DXS_MAX_PWR_PA_HF - LR1120MB1DXS_MIN_PWR_PA_HF + 1] = {
     { // Expected output power = -18dBm
         .power = -18,
         .pa_config = {
