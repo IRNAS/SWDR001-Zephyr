@@ -67,8 +67,6 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-
 /**
  * @brief Duration of the wait after printing example configuration on the serial port
  *
@@ -109,7 +107,7 @@ const lr11xx_wifi_result_format_t wifi_scan_result_format = WIFI_RESULT_FORMAT;
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 static uint32_t              number_of_scan = 0;
 
 /*
@@ -180,8 +178,6 @@ int main( void )
     int ret = 0;
 
     LOG_INF( "===== LR11xx %s example =====\n", get_interface_name( ) );
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( ( void* ) context );
 

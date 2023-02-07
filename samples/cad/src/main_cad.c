@@ -61,8 +61,6 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-
 /**
  * @brief LR11xx interrupt mask used by the application
  */
@@ -93,7 +91,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 static lr11xx_radio_cad_params_t cad_params = {
     .cad_symb_nb     = CAD_SYMBOL_NUM,
@@ -136,9 +134,6 @@ int main( void )
     int ret = 0;
 
     LOG_INF( "===== LR11xx CAD example =====\n" );
-
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( ( void* ) context );
 

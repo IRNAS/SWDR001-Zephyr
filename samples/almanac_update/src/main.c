@@ -14,9 +14,7 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 static lr11xx_gnss_context_status_bytestream_t context_status_buffer;
 lr11xx_gnss_context_status_t context_status;
 
@@ -28,8 +26,6 @@ void main( void )
     int ret = 0;
 
     LOG_INF( "===== LR11xx Almanac Update =====" );
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
     apps_common_lr11xx_fetch_and_print_version( context );

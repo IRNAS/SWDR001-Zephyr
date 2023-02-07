@@ -61,7 +61,6 @@ LOG_MODULE_REGISTER(gnss_assisted);
  * @brief UART peripheral
  *
  */
-#define UART_NODE DT_NODELABEL(uart0)
 
 #define MAX_BUF_SIZE 255
 
@@ -99,7 +98,7 @@ const gnss_configuration_t gnss_configuration = {
     .max_sv              = GNSS_MAX_SV,
 };
 
-const struct device *uart_dev;
+const struct device *uart_dev = DEVICE_DT_GET(DT_NODELABEL(uart0));
 
 const struct uart_config uart_cfg = {
     .baudrate = 115200,
@@ -223,8 +222,7 @@ uint32_t get_gps_time_now( void )
 static void init_uart(void)
 {
     //Init UART callback
-    uart_dev = device_get_binding(DT_LABEL(UART_NODE));
-    if (!uart_dev)
+    if (!device_is_ready(uart_dev))
     {
         LOG_ERR("Failed to init GNSS UART!");
         return;

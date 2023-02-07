@@ -54,8 +54,6 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE CONSTANTS -------------------------------------------------------
@@ -71,7 +69,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 /*
  * -----------------------------------------------------------------------------
@@ -91,8 +89,6 @@ void main( void )
     int ret = 0;
 
     LOG_INF( "===== LR11xx TX CW example =====\n" );
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
     apps_common_lr11xx_fetch_and_print_version( context );

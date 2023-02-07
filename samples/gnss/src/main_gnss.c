@@ -61,8 +61,6 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-
 #define APP_PARTIAL_SLEEP true
 #define NAV_MAX_LENGTH ( 300 )
 
@@ -86,7 +84,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 static uint32_t              number_of_scan = 0;
 
 /*
@@ -129,8 +127,6 @@ static bool can_execute_next_scan( void );
 int main( void )
 {
     LOG_INF( "===== %s =====\n", gnss_get_example_name( ) );
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
 

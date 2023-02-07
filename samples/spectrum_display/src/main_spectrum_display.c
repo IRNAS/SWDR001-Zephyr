@@ -58,7 +58,6 @@ LOG_MODULE_REGISTER(main);
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 /**
  * @brief Duration of the wait between setting to RX mode and valid instant RSSI value available
@@ -93,7 +92,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 /*
  * -----------------------------------------------------------------------------
@@ -116,8 +115,6 @@ int main( void )
     int ret = 0;
 
     LOG_INF( "===== LR11xx Spectrum Display example =====\n" );
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( ( void* ) context );
 

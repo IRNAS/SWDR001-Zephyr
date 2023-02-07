@@ -25,8 +25,6 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-
 #define RX_TIMEOUT_VALUE 600
 
 /**
@@ -120,7 +118,7 @@ typedef struct radio_config {
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context; //LR context
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 static radio_config config; //LR modifiable config options
 
@@ -268,9 +266,6 @@ void main( void )
 
     /* Init BLE adv */
     initialize_bt_adv();
-
-    /* Get DT implementation and init peripherals */
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     /* General system init */
     apps_common_lr11xx_system_init( context );

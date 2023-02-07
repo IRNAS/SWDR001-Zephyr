@@ -59,8 +59,6 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
 
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-
 /**
  * @brief LR11xx interrupt mask used by the application
  */
@@ -91,7 +89,7 @@ const char* mode = "Transmitter";
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 static uint8_t buffer[PAYLOAD_LENGTH];
 
@@ -135,8 +133,6 @@ int main( void )
     int ret = 0;
 
     LOG_INF( "===== LR11xx PER example - %s =====\n", mode );
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( ( void* ) context );
 

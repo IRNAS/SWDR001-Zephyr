@@ -68,13 +68,10 @@ Compatible Device Tree bing for `lr11xx` needs to be added to DT file, for examp
 };
 ```
 
-LR11XX device structure can them be accesed trough device binding:
+LR11XX device structure can them be accessed trough device binding:
 
 ```c
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
-const struct device *context;
-
-context = device_get_binding(DT_LABEL(LR11XX_NODE));
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 ```
 
 ## Development installation
