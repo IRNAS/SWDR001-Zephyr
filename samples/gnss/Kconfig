@@ -1,0 +1,22 @@
+# COPYRIGHT NOTICE: (c) 2022 Irnas. All rights reserved.
+
+menu "Zephyr Kernel"
+source "$ZEPHYR_BASE/Kconfig.zephyr"
+endmenu
+
+config GNSS_SCAN_MODE
+    bool "GNSS scan mode"
+
+choice 
+    prompt "GNSS scan mode"
+    default GNSS_SCAN_AUTONOMOUS
+    help
+      Specify GNSS scan mode.
+
+config GNSS_SCAN_AUTONOMOUS
+    bool "Autonomous GNSS scan mode"
+
+config GNSS_SCAN_ASSISTED
+    bool "Assisted GNSS scan mode"
+
+endchoice

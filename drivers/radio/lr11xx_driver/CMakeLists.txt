@@ -1,0 +1,12 @@
+zephyr_include_directories(.)
+
+zephyr_library_sources(lr11xx_bootloader.c)
+zephyr_library_sources(lr11xx_crypto_engine.c)
+zephyr_library_sources(lr11xx_driver_version.c)
+zephyr_library_sources(lr11xx_gnss.c)
+zephyr_library_sources(lr11xx_lr_fhss.c)
+zephyr_library_sources(lr11xx_radio.c)
+zephyr_library_sources(lr11xx_radio_timings.c)
+zephyr_library_sources(lr11xx_regmem.c)
+zephyr_library_sources(lr11xx_system.c)
+zephyr_library_sources(lr11xx_wifi.c)

@@ -1,0 +1,1 @@
+add_subdirectory_ifdef(CONFIG_LR11XX_LIB radio)

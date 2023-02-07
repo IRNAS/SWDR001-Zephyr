@@ -1,0 +1,66 @@
+menuconfig LR11XX_LIB
+    bool "LR11XX library"
+    depends on SPI && GPIO
+    help
+        This library can handle one instance of lr1110/lr1120 chip present on the
+        board.
+        It implements basic lr11xx radio driver.
+
+if LR11XX_LIB
+
+config LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC
+	int "Busy pin wait time"
+	default 10
+	help
+	  Busy pin wait time in seconds.
+
+config LR11XX_USE_CRC_OVER_SPI
+  bool "Use CRC over SPI communication"
+
+config LR11XX_INIT_PRIORITY
+  int "Init priority"
+  default 72
+
+config LR11XX_EVENT_TRIGGER
+	bool
+
+choice
+	prompt "Event trigger mode"
+	default LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
+	help
+	  Specify the type of triggering to be used by the lr11xx driver.
+
+config LR11XX_EVENT_TRIGGER_NONE
+	bool "No trigger on event"
+
+config LR11XX_EVENT_TRIGGER_GLOBAL_THREAD
+	bool "Use global thread"
+	depends on GPIO
+	select LR11XX_EVENT_TRIGGER
+
+config LR11XX_EVENT_TRIGGER_OWN_THREAD
+	bool "Use own thread"
+	depends on GPIO
+	select LR11XX_EVENT_TRIGGER
+
+endchoice
+
+config LR11XX_THREAD_PRIORITY
+	int "Thread priority"
+	depends on LR11XX_EVENT_TRIGGER_OWN_THREAD
+	default 10
+	help
+	  Priority of thread used by the driver to handle interrupts.
+
+config LR11XX_THREAD_STACK_SIZE
+	int "Thread stack size"
+	depends on LR11XX_EVENT_TRIGGER_OWN_THREAD
+	default 1024
+	help
+	  Stack size of thread used by the driver to handle interrupts.
+
+module = LR11XX
+module-str = lr11xx
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # LR11XX_LIB

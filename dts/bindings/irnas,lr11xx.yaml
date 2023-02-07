@@ -1,0 +1,200 @@
+# Copyright (c) 2021, IRNAS d.o.o.
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  Semtech LR11XX LoRa radio module 
+
+compatible: "irnas,lr11xx"
+
+include: spi-device.yaml
+
+properties:
+    pwr-en-gpios:
+      type: phandle-array
+      required: false
+      description: |
+        GPIO responsible for power of lr11xx.
+
+    reset-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO connected to the NRESET signal on lr11xx.
+
+        This signal is active-low as interpreted by lr11xx.
+
+    gps-lna-en-gpios:
+      type: phandle-array
+      required: false
+      description: |
+        GPIO responsible for power of GPS LNA used by lr11xx.
+
+    busy-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO connected to the BUSY/DIO0 signal on lr11xx.
+
+        The BUSY line is high when the device is in sleep mode, 
+        and ready to accept a command. 
+        The BUSY line is low when the device is processing sent command.
+
+        This signal is active-low as interpreted by lr11xx.
+
+    event-gpios:
+      type: phandle-array
+      required: true
+      description: |
+        GPIO connected to the LR_EVENT/DIO9 signal on lr11xx.
+        High EVENT line indicates an event must be read from lr11xx.
+        The EVENT line stays high until all events are cleared.
+
+        This signal is active-high as interpreted by lr11xx.
+
+    # RF configuration (DIO pins 5 through 8)
+    # For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to be added to DT file!
+
+    rf-sw-enable:
+      type: int
+      required: false
+      description: |
+        Configuration for enabling rf switches RFSW0 through RFSW4 (DIO5 - DIO9).
+
+        Select RFSW/DIO pins that will be used in any of the lr11xx modes.
+        If a RFSW/DIO pin is not selected it can not be used in any of the lr11xx
+        modes and will be left in High-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+    rf-sw-standby-mode:
+      type: int
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
+        for lr1xx standby mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+    rf-sw-rx-mode:
+      type: int
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
+        for lr11xx rx mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+    rf-sw-tx-mode:
+      type: int
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
+        for lr11xx tx mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+    rf-sw-tx-hp-mode:
+      type: int
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
+        for lr11xx tx hp mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+    rf-sw-tx-hf-mode:
+      type: int
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
+        for lr11xx tx hf mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+    rf-sw-wifi-mode:
+      type: int
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
+        for lr11xx wifi mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+    rf-sw-gnss-mode:
+      type: int
+      required: false
+      description: |
+        Configuration for selecting RFSW0 through RFSW4 (DIO5 - DIO9) pin states 
+        for lr11xx gnss mode.
+
+        If a RFSW/DIO pin is selected and enabled, the pin is set high in this mode.
+        If a RFSW/DIO pin is not selected, but it is enabled, the pin is set low.
+        If a RFSW/DIO pin is not selected and not enabled it is left in HIGH-Z state.
+
+        Valid values are: LR11XX_DIO5 - 9, representing DIO5 - DIO9 pins.
+        Add multiple with logical or operation, i.e. LR11XX_DIO5 | LR11XX_DIO6
+        If none of the RFSW/DIO pins do not need to be enabled then do not set the
+        value in the Device Tree.
+        For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to 
+        be added to DT file!
+
+
