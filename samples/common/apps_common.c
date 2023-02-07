@@ -6,11 +6,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <zephyr.h>
-#include <device.h>
+#include <zephyr/kernel.h>
+#include <zephyr/device.h>
 #include <zephyr/types.h>
-#include <drivers/gpio.h>
-#include <drivers/spi.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/spi.h>
 
 #include "apps_common.h"
 #include "lr11xx_regmem.h"
@@ -19,7 +19,7 @@
 #include "lr11xx_radio_types_str.h"
 #include "lr11xx_board.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(lr11xx_common, CONFIG_LR11XX_LOG_LEVEL);
 
 /*
@@ -184,7 +184,7 @@ void apps_common_lr11xx_fetch_and_print_version( const struct device* context )
 void apps_common_lr11xx_radio_init( const void* context )
 {
     int ret;
-    
+
     const lr11xx_board_pa_pwr_cfg_t* pa_pwr_cfg = lr11xx_board_get_pa_pwr_cfg( RF_FREQ_IN_HZ, TX_OUTPUT_POWER_DBM );
     if( pa_pwr_cfg == NULL )
     {
@@ -193,9 +193,9 @@ void apps_common_lr11xx_radio_init( const void* context )
         {
         }
     }
-    
+
     print_common_configuration( );
-    
+
     ret = lr11xx_radio_set_pkt_type( context, PACKET_TYPE );
     if(ret)
     {

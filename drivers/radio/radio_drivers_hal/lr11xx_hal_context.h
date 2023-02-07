@@ -14,9 +14,9 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include <drivers/gpio.h>
-#include <drivers/spi.h>
-#include <zephyr.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/spi.h>
+#include <zephyr/kernel.h>
 
 #include "lr11xx_system_types.h"
 

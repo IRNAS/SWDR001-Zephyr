@@ -40,16 +40,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
-#include <drivers/uart.h>
-#include <devicetree.h>
+#include <zephyr/drivers/uart.h>
+#include <zephyr/devicetree.h>
 
 #include "gnss_example_api.h"
 #include "lr11xx_gnss.h"
 #include "main_gnss.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(gnss_assisted);
 
 /*
@@ -59,9 +59,8 @@ LOG_MODULE_REGISTER(gnss_assisted);
 
 /**
  * @brief UART peripheral
- * 
+ *
  */
-#define UART_NODE DT_NODELABEL(uart0)  
 
 #define MAX_BUF_SIZE 255
 
@@ -99,7 +98,7 @@ const gnss_configuration_t gnss_configuration = {
     .max_sv              = GNSS_MAX_SV,
 };
 
-const struct device *uart_dev;
+const struct device *uart_dev = DEVICE_DT_GET(DT_NODELABEL(uart0));
 
 const struct uart_config uart_cfg = {
     .baudrate = 115200,
@@ -129,15 +128,15 @@ static uint32_t get_gps_time_now( void );
 
 /**
  * @brief Initialise UART RX callback.
- * 
+ *
  */
 static void init_uart(void);
 
 /**
  * @brief UART RX callback.
- * 
- * @param dev 
- * @param user_data 
+ *
+ * @param dev
+ * @param user_data
  */
 static void rc_uart_cb(const struct device *dev, void *user_data);
 
@@ -169,7 +168,7 @@ void gnss_call_scan( const void* context )
     if(ret)
     {
         LOG_ERR("Failed to call assisted gnss scan.");
-    }  
+    }
 }
 
 const char* gnss_get_example_name( void ) { return ( const char* ) "LR11xx GNSS Assisted scan example"; }
@@ -213,18 +212,17 @@ uint32_t get_gps_delay_from_serial( )
     return gps_local_delay_s;
 }
 
-uint32_t get_gps_time_now( void ) 
-{ 
+uint32_t get_gps_time_now( void )
+{
     uint64_t local_rtc = k_uptime_get();
-    return (uint32_t)(local_rtc/1000) + gps_local_delay_s; 
+    return (uint32_t)(local_rtc/1000) + gps_local_delay_s;
 
 }
 
 static void init_uart(void)
 {
     //Init UART callback
-    uart_dev = device_get_binding(DT_LABEL(UART_NODE));
-    if (!uart_dev)
+    if (!device_is_ready(uart_dev))
     {
         LOG_ERR("Failed to init GNSS UART!");
         return;
@@ -250,16 +248,16 @@ static void rc_uart_cb(const struct device *dev, void *user_data)
 
 	uart_irq_update(dev);
 
-	if (uart_irq_rx_ready(dev)) 
+	if (uart_irq_rx_ready(dev))
 	{
 		int data_length;
-		if (!rx) 
+		if (!rx)
 		{
 			rx = k_malloc(sizeof(*rx));
-			if (rx) 
+			if (rx)
 			{
 				rx->len = 0;
-			} 
+			}
 			else {
 				/* Disable UART interface, it will be
 				 * enabled again after releasing the buffer.
@@ -273,20 +271,20 @@ static void rc_uart_cb(const struct device *dev, void *user_data)
 
 
 		data_length = uart_fifo_read(dev, &rx->data[rx->len], MAX_BUF_SIZE-rx->len);
-        
-		rx->len += data_length;    
+
+		rx->len += data_length;
 
 		if (rx->len > 0) {
             if ((rx->len == MAX_BUF_SIZE) ||
 			   ((rx->data[rx->len - 2] == '\r') &&
-			   (rx->data[rx->len - 1] == '\n'))) 
+			   (rx->data[rx->len - 1] == '\n')))
 			{
                 //If only new line is obtained, skip
                 if(rx->len > 1)
                 {
                     rx->data[rx->len - 2] = 0;
                     rx->data[rx->len - 1] = 0;
-                    
+
                     rx->len -= 2;
 
                     k_fifo_put(&fifo_uart_rx_data, rx);

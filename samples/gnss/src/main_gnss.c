@@ -40,10 +40,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_system.h"
@@ -53,15 +53,13 @@
 
 #include "gnss_example_api.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
-
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 #define APP_PARTIAL_SLEEP true
 #define NAV_MAX_LENGTH ( 300 )
@@ -86,7 +84,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 static uint32_t              number_of_scan = 0;
 
 /*
@@ -130,14 +128,12 @@ int main( void )
 {
     LOG_INF( "===== %s =====\n", gnss_get_example_name( ) );
 
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
-
     apps_common_lr11xx_system_init( context );
 
     apps_common_lr11xx_fetch_and_print_version( context );
 
     int ret = 0;
-    
+
     LOG_INF("Set dio irq mask");
     ret = lr11xx_system_set_dio_irq_params( context, IRQ_MASK, 0 );
     if(ret)

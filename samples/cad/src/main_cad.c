@@ -40,10 +40,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "main_cad.h"
 #include "apps_common.h"
@@ -53,15 +53,13 @@
 #include "lr11xx_system.h"
 #include "lr11xx_regmem.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
-
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 /**
  * @brief LR11xx interrupt mask used by the application
@@ -93,7 +91,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 static lr11xx_radio_cad_params_t cad_params = {
     .cad_symb_nb     = CAD_SYMBOL_NUM,
@@ -134,11 +132,8 @@ static void cad_reception_failure_handling( void );
 int main( void )
 {
     int ret = 0;
-    
+
     LOG_INF( "===== LR11xx CAD example =====\n" );
-
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( ( void* ) context );
 

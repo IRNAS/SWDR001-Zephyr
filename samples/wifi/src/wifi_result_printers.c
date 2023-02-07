@@ -36,14 +36,14 @@
  * -----------------------------------------------------------------------------
  * --- DEPENDENCIES ------------------------------------------------------------
  */
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
 
 #include "lr11xx_wifi.h"
 #include "lr11xx_wifi_types_str.h"
 #include "wifi_result_printers.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(wifi);
 
 /*
