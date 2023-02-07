@@ -39,7 +39,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 
 #include "main_wifi.h"
 #include "wifi_scan_country_code_time_limit.h"
@@ -48,7 +48,7 @@
 #include "wifi_configuration_base.h"
 #include "wifi_result_printers.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(wifi_scan_country_code_time_limit);
 
 /*

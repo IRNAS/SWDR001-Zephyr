@@ -39,10 +39,10 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_board.h"
@@ -51,15 +51,13 @@
 #include "lr11xx_system.h"
 #include "main_per.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
-
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 /**
  * @brief LR11xx interrupt mask used by the application
@@ -91,7 +89,7 @@ const char* mode = "Transmitter";
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 static uint8_t buffer[PAYLOAD_LENGTH];
 
@@ -136,8 +134,6 @@ int main( void )
 
     LOG_INF( "===== LR11xx PER example - %s =====\n", mode );
 
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
-
     apps_common_lr11xx_system_init( ( void* ) context );
 
     apps_common_lr11xx_fetch_and_print_version( ( void* ) context );
@@ -167,7 +163,7 @@ int main( void )
         buffer[i] = i;
     }
 #if RECEIVER == 1
-    
+
     ret = lr11xx_radio_set_rx( context, RX_TIMEOUT_VALUE );
     if(ret)
     {
@@ -222,7 +218,7 @@ int main( void )
 void on_tx_done( void )
 {
     int ret = 0;
-    
+
     k_sleep(K_MSEC( TX_TO_TX_DELAY_IN_MS ));
 
     buffer[0]++;

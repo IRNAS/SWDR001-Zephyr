@@ -40,11 +40,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
 #include <zephyr/random/rand32.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_radio.h"
@@ -54,15 +54,13 @@
 #include "lr11xx_board.h"
 #include "main_ping_pong.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
-
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 /**
  * @brief Size of ping-pong message prefix
@@ -107,7 +105,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context;
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 static uint8_t buffer_tx[PAYLOAD_LENGTH];
 static bool    is_master = true;
@@ -138,8 +136,6 @@ static void ping_pong_reception_failure_handling( void );
 void main( void )
 {
     LOG_INF( "===== LR11xx TX CW example =====" );
-
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     apps_common_lr11xx_system_init( context );
 

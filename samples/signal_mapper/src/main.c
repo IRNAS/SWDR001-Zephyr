@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
 #include <zephyr/random/rand32.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
-#include <bluetooth/bluetooth.h>
-#include <bluetooth/hci.h>
+#include <zephyr/bluetooth/bluetooth.h>
+#include <zephyr/bluetooth/hci.h>
 
 #include "apps_common.h"
 #include "lr11xx_radio.h"
@@ -17,15 +17,13 @@
 #include "lr11xx_regmem.h"
 #include "lr11xx_board.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*
  * -----------------------------------------------------------------------------
  * --- PRIVATE MACROS-----------------------------------------------------------
  */
-
-#define LR11XX_NODE           DT_NODELABEL(lr1120)
 
 #define RX_TIMEOUT_VALUE 600
 
@@ -75,13 +73,13 @@ LOG_MODULE_REGISTER(main);
 
 /**
  * @brief BT advertisement name prefix
- * 
+ *
  */
 #define DEVICE_NAME  "Mopper-"
 
 /**
  * @brief Use nordic BT_MANUFACTURER_DATA for test
- * 
+ *
  */
 #define BT_MANUFACTURER_DATA  0x0059
 
@@ -106,7 +104,7 @@ enum {
 
 /**
  * @brief radio config structure, including all configs we weill modify during the example.
- * 
+ *
  */
 typedef struct radio_config {
     lr11xx_board_pa_pwr_cfg_t* pa_pwr_cfg;
@@ -120,7 +118,7 @@ typedef struct radio_config {
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context; //LR context
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
 
 static radio_config config; //LR modifiable config options
 
@@ -140,7 +138,7 @@ static const uint8_t prefix_size = ( PING_PONG_PREFIX_SIZE <= PAYLOAD_LENGTH ? P
 
 /**
  * @brief BT advertisement parameters
- * 
+ *
  */
 static struct bt_le_adv_param *adv_param =
     BT_LE_ADV_PARAM(BT_LE_ADV_OPT_USE_IDENTITY,
@@ -150,7 +148,7 @@ static struct bt_le_adv_param *adv_param =
 
 /**
  * @brief BT scan parameters - use list fillter for scanning to only scan for particular device in BT example
- * 
+ *
  */
 struct bt_le_scan_param scan_param = {
 		.type       = BT_HCI_LE_SCAN_PASSIVE,
@@ -170,7 +168,7 @@ static bool bt_scan_done = false; //Scan results obtained flag
 static bool bt_scan_timeout = false; //BT scan timeout flag
 /**
  * @brief Advertisement data structure.
- * 
+ *
  */
 static const struct bt_data ad[] = {
 	BT_DATA(BT_DATA_MANUFACTURER_DATA, adv_data, sizeof(adv_data)),
@@ -190,7 +188,7 @@ static void ping_pong_reception_failure_handling( void );
 
 /**
  * @brief Update radio_config config structure with new values based on the configuration choice.
- * 
+ *
  * @param config_label CONFIG_1 / CONFIG_2
  * @return int - 0 on success or negative error code
  */
@@ -198,7 +196,7 @@ static int ping_pong_change_config( int config_label);
 
 /**
  * @brief Change initialisation of some radio parameters,a s set in the radio_config config structure.
- * 
+ *
  * @return int - 0 on success or negative error code
  */
 static int ping_pong_radio_reinit( void );
@@ -217,40 +215,40 @@ static void ping_pong_lr11xx_receive( const void* context, uint8_t* buffer, uint
 /**
  * @brief Initialise BT advertisement
  * Enable and init BT.
- * Construct device name by attaching 3 significant bytes of MAC address to pre-defined name. 
+ * Construct device name by attaching 3 significant bytes of MAC address to pre-defined name.
  * Initialize advertisement data and start advertising.
- * 
+ *
  */
 static void initialize_bt_adv(void);
 
 /**
  * @brief BT scan cb
- * 
- * @param addr 
- * @param rssi 
- * @param adv_type 
- * @param buf 
+ *
+ * @param addr
+ * @param rssi
+ * @param adv_type
+ * @param buf
  */
 static void scan_cb(const bt_addr_le_t *addr, int8_t rssi, uint8_t adv_type,
 		    struct net_buf_simple *buf);
 
 /**
  * @brief timer handler, sets timeout to true when timer expires
- * 
- * @param dummy 
+ *
+ * @param dummy
  */
 static void bt_scan_timer_handler(struct k_timer *dummy);
 
 /**
  * @brief Perform BT scan, start timer and wait for result or timeout.
- * 
+ *
  */
 static void ping_pong_wait_on_bt_scan( void );
 
 
 /**
  * @brief Construct a new k timer define object for bt scan timeout
- * 
+ *
  */
 K_TIMER_DEFINE(bt_scan_timer, bt_scan_timer_handler, NULL);
 
@@ -268,9 +266,6 @@ void main( void )
 
     /* Init BLE adv */
     initialize_bt_adv();
-   
-    /* Get DT implementation and init peripherals */
-    context = device_get_binding(DT_LABEL(LR11XX_NODE));
 
     /* General system init */
     apps_common_lr11xx_system_init( context );
@@ -278,7 +273,7 @@ void main( void )
     /* Print LR11xx HW and FW version */
     apps_common_lr11xx_fetch_and_print_version( context );
 
-    /* Start with defout LR configuration as defined for all samples */ 
+    /* Start with defout LR configuration as defined for all samples */
     apps_common_lr11xx_radio_init( context );
 
     /* Set initial config */
@@ -367,7 +362,7 @@ void on_tx_done( void )
         {
             ping_pong_wait_on_bt_scan();
         }
-        
+
         /* Change config */
         current_config = (current_config + 1) % 2;
         ping_pong_change_config(current_config);
@@ -375,7 +370,7 @@ void on_tx_done( void )
         /* Apply config */
         ping_pong_radio_reinit();
     }
-    
+
     k_sleep(K_MSEC( DELAY_PING_PONG_PACE_MS ));
 
     int ret = lr11xx_radio_set_rx( context, RX_TIMEOUT_VALUE + sys_rand32_get() % 500 );  // Random delay to avoid unwanted synchronization
@@ -551,7 +546,7 @@ static int ping_pong_change_config( int config_label)
         config.radio_mod.cr = LORA_CODING_RATE_2;
         config.radio_mod.ldro = apps_common_compute_lora_ldro( LORA_SPREADING_FACTOR_2, LORA_BANDWIDTH_2 );
     }
-    else 
+    else
     {
         ret = -EIO;
     }
@@ -606,16 +601,16 @@ static void ping_pong_lr11xx_receive( const void* context, uint8_t* buffer, uint
                                 rx_buffer_status.pld_len_in_bytes );
     *size = rx_buffer_status.pld_len_in_bytes;
 
-    memcpy(rx_count, buffer+prefix_size, sizeof(*rx_count)); 
+    memcpy(rx_count, buffer+prefix_size, sizeof(*rx_count));
 
     lr11xx_radio_get_lora_pkt_status( context, &pkt_status_lora );
 
-    printk( "{\"type\": \"lr\", \"config_id\": \"%02X\", \"freq\": %u, \"P\": %i, \"SF\": \"%02X\", \"BW\": \"%02X\", \"CR\": \"%02X\", \"RSSI\": %i, \"S_RSSI\": %i, \"SNR\": %i, \"count\": %d}\n", 
+    printk( "{\"type\": \"lr\", \"config_id\": \"%02X\", \"freq\": %u, \"P\": %i, \"SF\": \"%02X\", \"BW\": \"%02X\", \"CR\": \"%02X\", \"RSSI\": %i, \"S_RSSI\": %i, \"SNR\": %i, \"count\": %d}\n",
                                                                                                      current_config,
-                                                                                                     config.freq_in_hz,  
-                                                                                                     config.output_p_dbm, 
-                                                                                                     config.radio_mod.sf, 
-                                                                                                     config.radio_mod.bw, 
+                                                                                                     config.freq_in_hz,
+                                                                                                     config.output_p_dbm,
+                                                                                                     config.radio_mod.sf,
+                                                                                                     config.radio_mod.bw,
                                                                                                      config.radio_mod.cr,
                                                                                                      pkt_status_lora.rssi_pkt_in_dbm,
                                                                                                      pkt_status_lora.signal_rssi_pkt_in_dbm,
