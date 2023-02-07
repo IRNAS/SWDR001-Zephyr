@@ -40,14 +40,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 
 #include <zephyr/types.h>
 #include "gnss_example_api.h"
 #include "lr11xx_gnss.h"
 #include "main_gnss.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(gnss_autonomous);
 
 /*
@@ -114,7 +114,7 @@ void gnss_call_scan( const void* context )
     if(ret)
     {
         LOG_ERR("Failed to call autonomous gnss scan.");
-    }                                               
+    }
 }
 
 const char* gnss_get_example_name( void ) { return ( const char* ) "LR11xx GNSS Autonomous scan example"; }

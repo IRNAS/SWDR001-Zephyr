@@ -16,8 +16,8 @@ extern "C" {
 #include "lr11xx_hal_context.h"
 #include "lr11xx_radio_types.h"
 #include "lr11xx_types.h"
-#include <device.h>
-#include <zephyr.h>
+#include <zephyr/device.h>
+#include <zephyr/kernel.h>
 
 typedef struct lr11xx_board_pa_pwr_cfg_t {
 	int8_t power;

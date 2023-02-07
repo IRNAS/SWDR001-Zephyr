@@ -7,19 +7,19 @@
  */
 
 #include <string.h>
-#include <device.h>
-#include <devicetree.h>
-#include <drivers/gpio.h>
-#include <drivers/spi.h>
-#include <pm/device.h>
-#include <zephyr.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/spi.h>
+#include <zephyr/kernel.h>
+#include <zephyr/pm/device.h>
 
 #include "lr11xx_board.h"
 #include "lr11xx_hal_context.h"
 #include "lr11xx_radio_types.h"
 #include "lr11xx_system_types.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(lr11xx_board);
 
 #define DT_DRV_COMPAT irnas_lr11xx

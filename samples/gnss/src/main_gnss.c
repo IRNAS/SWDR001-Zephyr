@@ -40,10 +40,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_system.h"
@@ -53,7 +53,7 @@
 
 #include "gnss_example_api.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*
@@ -137,7 +137,7 @@ int main( void )
     apps_common_lr11xx_fetch_and_print_version( context );
 
     int ret = 0;
-    
+
     LOG_INF("Set dio irq mask");
     ret = lr11xx_system_set_dio_irq_params( context, IRQ_MASK, 0 );
     if(ret)

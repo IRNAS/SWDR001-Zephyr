@@ -40,11 +40,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
 #include <zephyr/random/rand32.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_radio.h"
@@ -54,7 +54,7 @@
 #include "lr11xx_board.h"
 #include "main_ping_pong.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*

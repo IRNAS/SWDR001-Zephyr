@@ -38,7 +38,7 @@
  */
 
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
 
 #include "curve_plot.h"

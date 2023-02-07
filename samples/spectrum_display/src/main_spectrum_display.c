@@ -38,10 +38,10 @@
  */
 
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "apps_common.h"
 #include "lr11xx_board.h"
@@ -51,7 +51,7 @@
 #include "main_spectrum_display.h"
 #include "curve_plot.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*

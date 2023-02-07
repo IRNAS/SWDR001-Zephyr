@@ -40,10 +40,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <zephyr.h>
+#include <zephyr/kernel.h>
 #include <zephyr/types.h>
-#include <device.h>
-#include <devicetree.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
 
 #include "main_wifi.h"
 #include "apps_common.h"
@@ -59,7 +59,7 @@
 #include "wifi_scan_country_code.h"
 #include "wifi_scan_country_code_time_limit.h"
 
-#include <logging/log.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
 /*
@@ -178,7 +178,7 @@ void result_printer( const void* context );
 int main( void )
 {
     int ret = 0;
-    
+
     LOG_INF( "===== LR11xx %s example =====\n", get_interface_name( ) );
 
     context = device_get_binding(DT_LABEL(LR11XX_NODE));
