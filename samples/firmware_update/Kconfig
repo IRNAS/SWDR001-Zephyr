@@ -1,0 +1,16 @@
+
+choice
+    prompt "Choose LR11XX update type"
+    optional
+
+config UPDATE_LR1110
+    bool "Update lr1110 to latest transciever firmware"
+
+config UPDATE_LR1120
+    bool "Update lr1120 to latest transciever firmware"
+
+endchoice
+
+menu "Zephyr Kernel"
+source "$ZEPHYR_BASE/Kconfig.zephyr"
+endmenu
