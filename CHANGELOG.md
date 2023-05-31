@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [1.2.0] - 2023-05-31
+
+### Added
+
+-   Firmware update sample
+
 ## [1.1.0] - 2023-02-07
 
 ### Changed
@@ -33,7 +39,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   WiFi scan sample.
 -   Modified ping-pong sample with signal reporting for LR 868 MHz, LR 2.4 GHz and BT signal strength.
 
-[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.2.0...HEAD
+
+[1.2.0]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.1.0...v1.2.0
 
 [1.1.0]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.0.0...v1.1.0
 

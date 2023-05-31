@@ -16,7 +16,7 @@ The `samples` folder contains functional samples compatible with SWSD003 Semtech
 
 ## Installation
 
-This driver was written and tested for nrf-sdk v2.0.1
+This driver was written and tested for nrf-sdk v2.2.0
 
 To install, modify your project's `west.yml` and add the following sections:
 
@@ -29,12 +29,12 @@ To install, modify your project's `west.yml` and add the following sections:
 
 2. In the `projects` section add at the bottom (select revision you need):
 
-```
+```yaml
 - name: SWDR001-Zephyr
       repo-path: SWDR001-Zephyr
       path: irnas/SWDR001-Zephyr
       remote: irnas
-      revision: dev
+      revision: v1.1.0
 ```
 
 Then run `west update` in your freshly created bash/command prompt session.
