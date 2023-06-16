@@ -58,7 +58,7 @@ extern "C" {
  * @brief General parameters
  */
 #define PACKET_TYPE LR11XX_RADIO_PKT_TYPE_LORA
-#define RF_FREQ_IN_HZ 490000000U
+#define RF_FREQ_IN_HZ 868000000U
 #define TX_OUTPUT_POWER_DBM 14  // range [-17, +22] for sub-G, range [-18, 13] for 2.4G ( HF_PA )
 #define PA_RAMP_TIME LR11XX_RADIO_RAMP_48_US
 #define FALLBACK_MODE LR11XX_RADIO_FALLBACK_STDBY_RC

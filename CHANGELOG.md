@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [1.2.1] - 2023-06-16
+
+### Changed
+
+-   The RF frequency has been switched from 490 MHz to 868 MHz (which is a default EU frequency for LoRa) which applies to all the samples.
+
 ## [1.2.0] - 2023-05-31
 
 ### Added
@@ -39,7 +45,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   WiFi scan sample.
 -   Modified ping-pong sample with signal reporting for LR 868 MHz, LR 2.4 GHz and BT signal strength.
 
-[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.2.1...HEAD
+
+[1.2.1]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.2.0...v1.2.1
 
 [1.2.0]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.1.0...v1.2.0
 
