@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+-  The RF frequency has been switched from 490 MHz to 868 MHz (which is a default EU frequency for LoRa) which applies to all the samples.
+
+
 ## [1.2.0] - 2023-05-31
 
 ### Added
