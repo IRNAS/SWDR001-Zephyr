@@ -34,7 +34,7 @@ To install, modify your project's `west.yml` and add the following sections:
       repo-path: SWDR001-Zephyr
       path: irnas/SWDR001-Zephyr
       remote: irnas
-      revision: v1.1.0
+      revision: <release-tag | branch | commit hash>
 ```
 
 Then run `west update` in your freshly created bash/command prompt session.
