@@ -370,6 +370,7 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
 		.reset = GPIO_DT_SPEC_INST_GET(inst, reset_gpios),                                 \
 		.event = GPIO_DT_SPEC_INST_GET(inst, event_gpios),                                 \
 		.reg_mode = LR11XX_SYSTEM_REG_MODE_DCDC,                                           \
+		.lf_tx_path_options = DT_INST_PROP(inst, lf_tx_path),                              \
 		COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, pwr_en_gpios), (LR11XX_CFG_PWR_EN(inst)),  \
 			    ()) COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, gps_lna_en_gpios),         \
 					    (LR11XX_CFG_LNA_EN(inst)), ()) LR11XX_CFG_TCXO(inst)   \

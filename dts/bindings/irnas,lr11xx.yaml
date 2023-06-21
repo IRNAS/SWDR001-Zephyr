@@ -51,8 +51,16 @@ properties:
 
         This signal is active-high as interpreted by lr11xx.
 
-    # RF configuration (DIO pins 5 through 8)
-    # For usage of LR11XX_DIO5 - 9 macros, file lr11xx_bindings_def.h needs to be added to DT file!
+    lf-tx-path:
+      type: int
+      required: true
+      enum:
+        - 0
+        - 1
+        - 2
+      description: |
+        Configuration of the low power TX path placement. Selects which RF paths are places and thus which paths LR11XX will use.
+        See the LR11XX_TX_PATH_* macros in lr11xx_bindings_def.h for more information.
 
     rf-sw-enable:
       type: int
