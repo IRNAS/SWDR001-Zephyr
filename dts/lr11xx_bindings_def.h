@@ -16,4 +16,11 @@
 #define LR11XX_DIO8 (1 << 3)
 #define LR11XX_DIO9 (1 << 4)
 
+/* Only the low frequency low power path is placed. */
+#define LR11XX_TX_PATH_LF_LP	0
+/* Only the low frequency high power power path is placed. */
+#define LR11XX_TX_PATH_LF_HP	1
+/* Both the low frequency low power and low frequency high power paths are placed. */
+#define LR11XX_TX_PATH_LF_LP_HP 2
+
 #endif /* ZEPHYR_INCLUDE_DT_BINDINGS_LR11XX_H_*/

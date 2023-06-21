@@ -50,6 +50,9 @@ struct lr11xx_hal_context_cfg_t {
 	struct gpio_dt_spec pwr_en; /* enable pin */
 	struct gpio_dt_spec lna_en; /* lna pin */
 
+	/* LF tx path options */
+	uint8_t lf_tx_path_options;
+
 	lr11xx_system_rfswitch_cfg_t rf_switch_cfg; /* RF switch config */
 	struct lr11xx_hal_context_tcxo_cfg_t tcxo_cfg;
 	struct lr11xx_hal_context_lf_clck_cfg_t lf_clck_cfg;
