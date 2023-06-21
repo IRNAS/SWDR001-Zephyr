@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [1.4.0] - 2023-06-21
+
 ### Added
 
-- Mandatory `lf-tx-path` dts entry for LR11XX. This is required for proper TX path configuration.
+-   Mandatory `lf-tx-path` dts entry for LR11XX. This is required for proper TX path configuration.
 
 ## [1.3.0] - 2023-06-19
 
@@ -56,7 +58,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   WiFi scan sample.
 -   Modified ping-pong sample with signal reporting for LR 868 MHz, LR 2.4 GHz and BT signal strength.
 
-[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.4.0...HEAD
+
+[1.4.0]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.3.0...v1.4.0
 
 [1.3.0]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.2.1...v1.3.0
 
