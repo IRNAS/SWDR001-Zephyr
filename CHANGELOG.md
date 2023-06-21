@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+- Mandatory `lf-tx-path` dts entry for LR11XX. This is required for proper TX path configuration.
+
 ## [1.3.0] - 2023-06-19
 
 ### Changed
