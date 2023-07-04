@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Added
+
+-   Added additional device tree properties for TXCO, LF clock and regulator configuration.
+
 ## [1.4.0] - 2023-06-21
 
 ### Added
