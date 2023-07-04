@@ -48,22 +48,36 @@ Compatible Device Tree bing for `lr11xx` needs to be added to DT file, for examp
 ```dts
 &spi2 {
     cs-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
-    lr1120: lr1120@0 {
+    lr11xx: lr11xx@0 {
         compatible = "irnas,lr11xx";
         reg = <0>;
         spi-max-frequency = <4000000>;
-        label = "LR1120";
 
-        reset-gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
-        gps-lna-en-gpios = <&gpio0 29 0>;
-        busy-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
-        event-gpios = <&gpio1 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN) >;
+        /* Pin configuration */
+        reset-gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
+        pwr-en-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>;
+        busy-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
+        event-gpios = <&gpio0 30 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
 
-        rf-sw-enable = <(LR11XX_DIO5 | LR11XX_DIO6 | LR11XX_DIO7)>;
-        rf-sw-rx-mode = <LR11XX_DIO5>;
-        rf-sw-tx-mode = <(LR11XX_DIO5 | LR11XX_DIO6)>;
-        rf-sw-tx-hp-mode = <LR11XX_DIO6>;
-        rf-sw-gnss-mode = <LR11XX_DIO7>;
+        /* TX path configuration */
+        lf-tx-path = <LR11XX_TX_PATH_LF_HP>;
+
+        /* TCXO configuration */
+        tcxo-supply = <LR11XX_TCXO_SUPPLY_1_8V>;
+        tcxo-wakeup-time = <3>;
+
+        /* LF clock config */
+        lf-clk = <LR11XX_LFCLK_EXT>;
+
+        /* Regulator configuration */
+        reg-mode = <LR11XX_REG_MODE_DCDC>;
+
+        /* RF switch configuration */
+        rf-sw-enable = <(LR11XX_DIO5 | LR11XX_DIO6 | LR11XX_DIO7 | LR11XX_DIO8)>;
+        rf-sw-rx-mode = <(LR11XX_DIO6 | LR11XX_DIO8)>;
+        rf-sw-tx-hp-mode = <(LR11XX_DIO5 | LR11XX_DIO6 | LR11XX_DIO8)>;
+        rf-sw-wifi-mode = <(LR11XX_DIO5 | LR11XX_DIO8)>;
+        rf-sw-gnss-mode = <(LR11XX_DIO7)>;
     };
 };
 ```
@@ -71,7 +85,7 @@ Compatible Device Tree bing for `lr11xx` needs to be added to DT file, for examp
 LR11XX device structure can them be accessed trough device binding:
 
 ```c
-const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr11xx));
 ```
 
 ## Development installation

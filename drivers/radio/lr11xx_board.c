@@ -352,15 +352,15 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
 
 #define LR11XX_CFG_LF_CLCK(inst)                                                                   \
 	.lf_clck_cfg = {                                                                           \
-		.lf_clk_cfg = LR11XX_SYSTEM_LFCLK_RC,                                              \
+		.lf_clk_cfg = DT_INST_PROP(inst, lf_clk),                                          \
 		.wait_32k_ready = true,                                                            \
 	},
 
 #define LR11XX_CFG_TCXO(inst)                                                                      \
 	.tcxo_cfg = {                                                                              \
 		.has_tcxo = true,                                                                  \
-		.supply = LR11XX_SYSTEM_TCXO_CTRL_1_8V,                                            \
-		.timeout_ms = BOARD_TCXO_WAKEUP_TIME,                                              \
+		.supply = DT_INST_PROP(inst, tcxo_supply),                                         \
+		.timeout_ms = DT_INST_PROP(inst, tcxo_wakeup_time),                                \
 	},
 
 #define LR11XX_CONFIG(inst)                                                                        \
@@ -369,7 +369,7 @@ static int lr11xx_pm_action(const struct device *dev, enum pm_device_action acti
 		.busy = GPIO_DT_SPEC_INST_GET(inst, busy_gpios),                                   \
 		.reset = GPIO_DT_SPEC_INST_GET(inst, reset_gpios),                                 \
 		.event = GPIO_DT_SPEC_INST_GET(inst, event_gpios),                                 \
-		.reg_mode = LR11XX_SYSTEM_REG_MODE_DCDC,                                           \
+		.reg_mode = DT_INST_PROP(inst, reg_mode),                                          \
 		.lf_tx_path_options = DT_INST_PROP(inst, lf_tx_path),                              \
 		COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, pwr_en_gpios), (LR11XX_CFG_PWR_EN(inst)),  \
 			    ()) COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, gps_lna_en_gpios),         \

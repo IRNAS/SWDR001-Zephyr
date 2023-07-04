@@ -54,9 +54,44 @@ properties:
       - 2
     description: |
       Configuration of the low power TX path placement. Selects which RF paths
-      are placed and thus which paths LR11XX will use.
+      are placed and thus which paths lr11xx will use.
       Use the LR11XX_TX_PATH_* macros in lr11xx_bindings_def.h when setting
       this property.
+
+  tcxo-supply:
+    type: int
+    required: true
+    description: |
+      Supply voltage of the TCXO used by lr11xx. This is the voltage that
+      lr11xx will output on the VTCXO pin. Use the LR11XX_TCXO_SUPPLY_*
+      macros in lr11xx_bindings_def.h when setting this property.
+
+  tcxo-wakeup-time:
+    type: int
+    required: true
+    description: |
+      In milliseconds, the wakeup (or stabilization) time of the TCXO used by lr11xx.
+
+  lf-clk:
+    type: int
+    required: true
+    enum:
+      - 0
+      - 1
+      - 2
+    description: |
+      Low frequency clock source for lr11xx. Use the LR11XX_LFCLK_* macros
+      in lr11xx_bindings_def.h when setting this property.
+
+  reg-mode:
+    type: int
+    required: true
+    enum:
+      - 0
+      - 1
+    description: |
+      Configuration of the lr11xx regulator mode. Use the LR11XX_REG_MODE_*
+      macros in lr11xx_bindings_def.h when setting this property.
 
   rf-sw-enable:
     type: int
