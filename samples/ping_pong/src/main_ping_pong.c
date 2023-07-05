@@ -105,7 +105,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr11xx));
 
 static uint8_t buffer_tx[PAYLOAD_LENGTH];
 static bool    is_master = true;

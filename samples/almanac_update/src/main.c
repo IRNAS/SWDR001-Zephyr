@@ -14,7 +14,7 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(main);
 
-const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr11xx));
 static lr11xx_gnss_context_status_bytestream_t context_status_buffer;
 lr11xx_gnss_context_status_t context_status;
 

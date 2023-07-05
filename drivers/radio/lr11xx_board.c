@@ -26,8 +26,6 @@ LOG_MODULE_REGISTER(lr11xx_board);
 
 #define LR11XX_SPI_OPERATION (SPI_WORD_SET(8) | SPI_OP_MODE_MASTER | SPI_TRANSFER_MSB)
 
-#define BOARD_TCXO_WAKEUP_TIME (5)
-
 static const lr11xx_radio_rssi_calibration_table_t rssi_calibration_table_below_600mhz = {
 	.gain_offset = 0,
 	.gain_tune = {.g4 = 12,
