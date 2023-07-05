@@ -91,7 +91,7 @@ LOG_MODULE_REGISTER(main);
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr11xx));
 
 static lr11xx_radio_cad_params_t cad_params = {
     .cad_symb_nb     = CAD_SYMBOL_NUM,

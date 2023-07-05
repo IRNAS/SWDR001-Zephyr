@@ -89,7 +89,7 @@ const char* mode = "Transmitter";
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr11xx));
 
 static uint8_t buffer[PAYLOAD_LENGTH];
 

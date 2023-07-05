@@ -118,7 +118,7 @@ typedef struct radio_config {
  * --- PRIVATE VARIABLES -------------------------------------------------------
  */
 
-const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr1120));
+const struct device *context = DEVICE_DT_GET(DT_NODELABEL(lr11xx));
 
 static radio_config config; //LR modifiable config options
 
