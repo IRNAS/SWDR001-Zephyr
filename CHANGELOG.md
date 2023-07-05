@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [1.5.1] - 2023-07-05
+
 ### Fixed
 
 -   Fixed nrf52840DK overlay in all samples, adding missing bindings.
@@ -68,7 +70,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   WiFi scan sample.
 -   Modified ping-pong sample with signal reporting for LR 868 MHz, LR 2.4 GHz and BT signal strength.
 
-[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.1...HEAD
+
+[1.5.1]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.0...v1.5.1
 
 [1.5.0]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.4.0...v1.5.0
 
