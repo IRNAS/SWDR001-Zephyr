@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Changed
+
+-   Changed frequency band minimum for the 2GHz band from exactly 2GHz to 1.98GHz.
+
 ## [1.5.1] - 2023-07-05
 
 ### Fixed
