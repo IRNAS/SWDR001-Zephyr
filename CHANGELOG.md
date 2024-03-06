@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [1.5.2] - 2024-03-06
+
+### Changed
+
+-   Changed frequency band minimum for the 2GHz band from exactly 2GHz to 1.98GHz.
+
 ## [1.5.1] - 2023-07-05
 
 ### Fixed
@@ -70,7 +76,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   WiFi scan sample.
 -   Modified ping-pong sample with signal reporting for LR 868 MHz, LR 2.4 GHz and BT signal strength.
 
-[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.2...HEAD
+
+[1.5.2]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.1...v1.5.2
 
 [1.5.1]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.0...v1.5.1
 
