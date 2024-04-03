@@ -1,9 +1,9 @@
 
-#include <zephyr/types.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/spi.h>
 #include <zephyr/kernel.h>
+#include <zephyr/types.h>
 
 #include "lr11xx_hal.h"
 #include "lr11xx_hal_context.h"
@@ -186,6 +186,11 @@ lr11xx_hal_status_t lr11xx_hal_read(const void *context, const uint8_t *command,
 	const struct device *lr11xx_dev = (const struct device *)context;
 	const struct lr11xx_hal_context_cfg_t *lr11xx_cfg = lr11xx_dev->config;
 
+	/* When hal_read is called by lr11xx_crypto_restore_from_flash during LoRa initialization,
+	 * we sleep for 1 ms so we don't get stuck in an endless wait loop */
+	if ((command[0] == 0x05) && (command[1] == 0x0B)) {
+		k_sleep(K_MSEC(1));
+	}
 	prv_lr11xx_hal_check_device_ready(lr11xx_dev);
 	int ret;
 
