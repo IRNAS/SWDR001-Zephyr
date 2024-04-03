@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+-   Fixed failing hal_read on LoRa initialization resulting in endless waiting, adding a 1 ms sleep timer when calling `lr11xx_hal_read` from `lr11xx_crypto_restore_from_flash`.
+
 ## [1.5.2] - 2024-03-06
 
 ### Changed
