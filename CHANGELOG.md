@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+## [1.5.3] - 2024-04-03
+
 ### Fixed
 
 -   Fixed possible endless loop during lr11xx crypto initialization.
@@ -80,7 +82,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 -   WiFi scan sample.
 -   Modified ping-pong sample with signal reporting for LR 868 MHz, LR 2.4 GHz and BT signal strength.
 
-[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.2...HEAD
+[Unreleased]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.3...HEAD
+
+[1.5.3]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.2...v1.5.3
 
 [1.5.2]: https://github.com/IRNAS/SWDR001-Zephyr/compare/v1.5.1...v1.5.2
 
