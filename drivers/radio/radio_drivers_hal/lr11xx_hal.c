@@ -43,7 +43,7 @@ static lr11xx_hal_status_t prv_lr11xx_hal_wait_on_busy(const struct gpio_dt_spec
 		      K_SECONDS(LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC), K_NO_WAIT);
 
 	while (gpio_pin_get_dt(busy_pin) && !lr11xx_hal_busy_timeout) {
-		k_sleep(K_MSEC(1));
+		k_busy_wait(1000); /* 1 ms */
 	}
 
 	k_timer_stop(&lr11xx_hal_wait_on_busy_timer);
@@ -124,7 +124,7 @@ lr11xx_hal_status_t lr11xx_hal_write(const void *context, const uint8_t *command
 
 		// add a incompressible delay to prevent trying to wake the radio before it is full
 		// asleep
-		k_sleep(K_MSEC(1));
+		k_busy_wait(1000); /* 1 ms */
 		return LR11XX_HAL_STATUS_OK;
 	}
 
@@ -189,7 +189,7 @@ lr11xx_hal_status_t lr11xx_hal_read(const void *context, const uint8_t *command,
 	/* When hal_read is called by lr11xx_crypto_restore_from_flash during LoRa initialization,
 	 * we sleep for 1 ms so we don't get stuck in an endless wait loop */
 	if ((command[0] == 0x05) && (command[1] == 0x0B)) {
-		k_sleep(K_MSEC(1));
+		k_busy_wait(1000); /* 1 ms */
 	}
 	prv_lr11xx_hal_check_device_ready(lr11xx_dev);
 	int ret;
@@ -261,12 +261,12 @@ lr11xx_hal_status_t lr11xx_hal_reset(const void *context)
 	const struct lr11xx_hal_context_cfg_t *lr11xx_cfg = lr11xx_dev->config;
 
 	gpio_pin_set_dt(&lr11xx_cfg->reset, 1);
-	k_sleep(K_MSEC(1));
+	k_busy_wait(1000); /* 1 ms */
 	gpio_pin_set_dt(&lr11xx_cfg->reset, 0);
-	k_sleep(K_MSEC(1));
+	k_busy_wait(1000); /* 1 ms */
 
 	// Wait 200ms until internal lr11xx fw is ready
-	k_sleep(K_MSEC(200));
+	k_busy_wait(200 * 1000); /* 200 ms */
 	radio_mode = RADIO_AWAKE;
 
 	return LR11XX_HAL_STATUS_OK;
