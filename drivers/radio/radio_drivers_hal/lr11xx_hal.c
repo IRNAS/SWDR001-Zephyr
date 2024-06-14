@@ -7,6 +7,7 @@
 
 #include "lr11xx_hal.h"
 #include "lr11xx_hal_context.h"
+#include "version.h"
 
 #define LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC CONFIG_LR11XX_HAL_WAIT_ON_BUSY_TIMEOUT_SEC
 
@@ -69,7 +70,12 @@ static void prv_lr11xx_hal_check_device_ready(const struct device *dev)
 		prv_lr11xx_hal_wait_on_busy(&lr11xx_cfg->busy);
 	} else {
 		// Busy is HIGH in sleep mode, wake-up the device with a small glitch on NSS
+
+#if KERNEL_VERSION_NUMBER >= ZEPHYR_VERSION(3, 4, 0)
+		const struct spi_cs_control *ctrl = &lr11xx_cfg->spi.config.cs;
+#else
 		const struct spi_cs_control *ctrl = lr11xx_cfg->spi.config.cs;
+#endif
 
 		gpio_pin_set_dt(&ctrl->gpio, 1);
 		gpio_pin_set_dt(&ctrl->gpio, 0);
