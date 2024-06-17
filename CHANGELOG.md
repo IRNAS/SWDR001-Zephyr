@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+-   Fixed compatibility with Zephyr version 3.4.0 and up.
+
 ## [1.5.4] - 2024-04-18
 
 ### Fixed
